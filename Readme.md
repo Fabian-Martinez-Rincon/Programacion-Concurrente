@@ -17,7 +17,10 @@
 
 <p><img width="250" align='right' src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzBtYm40OGRtcnIwOXpsZ2o0ajJ1ejh6ZHR4d2FhNnRqbzBzOWU2ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oxRmD9a5pLTOOLigM/giphy.gif"></p>
 
+Primer Parcial
 - [Practica 1]()
+- [Practica 2]()
+- [Practica 3]()
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
