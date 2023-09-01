@@ -8,7 +8,7 @@
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&duration=1200&pause=1000&color=F78E23&center=true&width=435&lines=Programación Concurrente"/>
 
-<a title="" href="https://cafecito.app/ei-materias"><img src="/Documentos/Cafecito.png" alt="" /></a>
+
 
 </div>
 
@@ -18,7 +18,8 @@
 <p><img width="250" align='right' src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzBtYm40OGRtcnIwOXpsZ2o0ajJ1ejh6ZHR4d2FhNnRqbzBzOWU2ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oxRmD9a5pLTOOLigM/giphy.gif"></p>
 
 Primer Parcial
-- [Practica 1](/Documentos/Practica1.html)
+- [Explicaciones Teoricas](https://youtube.com/playlist?list=PLH8A0IjFldaGLATsgRdmPBtiNcp5KmAHo)
+- [Practica 1](https://fabian-martinez-rincon.github.io/Programacion-Concurrente/Documentos/Practica1.html)
 - [Practica 2]()
 - [Practica 3]()
 
