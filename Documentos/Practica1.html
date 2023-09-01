@@ -38,7 +38,10 @@
 </pre><ul>
 <li>Hasta que la condicion <code>B</code> no sea verdadera, el proceso que la esta ejecutando, va a estar bloqueado (o en espera), no la pasa de largo, no es lo mismo que un <code>if</code> por ejemplo</li>
 <li>Una vez que es verdadero, se ejecuta la sentencia que esta asociada a esa condicion, estas sentencias se ejecutan de forma atomica</li>
+<li>Cuando se detecta que es verdadero, empieza la “atomicidad”</li>
 </ul>
+<pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span>sentencias<span class="token operator">&gt;</span>
+</pre><p>El protocolo de entrada seria <code>&lt;</code> y el protocolo de salida seria <code>&gt;</code></p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
 
@@ -250,13 +253,80 @@ en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
 </blockquote>
 
       </div>
+      <div class="md-sidebar-toc">
+<div class="md-toc">
+<div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#conceptos-antes-de-empezar-la-practica" class="md-toc-link">
+            <p>Conceptos antes de empezar la practica</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#ejercicio-1" class="md-toc-link">
+            <p>Ejercicio 1</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#ejercicio-2" class="md-toc-link">
+            <p>Ejercicio 2</p>
+
+          </a></div><details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#ejercicio-3" class="md-toc-link"><p>Ejercicio 3</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#variables-compartidas" class="md-toc-link">
+            <p>Variables compartidas</p>
+
+          </a></div>
+        </div>
+      </details>
+    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#ejercicio-4" class="md-toc-link">
+            <p>Ejercicio 4</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#ejercicio-5" class="md-toc-link">
+            <p>Ejercicio 5</p>
+
+          </a></div><details style="padding:0;;padding-left:0px;" open="">
+        <summary class="md-toc-link-wrapper">
+          <a href="#ejercicio-6" class="md-toc-link"><p>Ejercicio 6</p>
+</a>
+          </summary>
+        <div>
+          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#variable-compartida" class="md-toc-link">
+            <p>Variable compartida</p>
+
+          </a></div>
+        </div>
+      </details>
+    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
+          <a href="#ejercicio-7" class="md-toc-link">
+            <p>Ejercicio 7</p>
+
+          </a></div>
+</div>
+</div>
+      <a id="sidebar-toc-btn">≡</a>
+    
+    
+    
+    
+    
+    
+<script>
+
+var sidebarTOCBtn = document.getElementById('sidebar-toc-btn')
+sidebarTOCBtn.addEventListener('click', function(event) {
+  event.stopPropagation()
+  if (document.body.hasAttribute('html-show-sidebar-toc')) {
+    document.body.removeAttribute('html-show-sidebar-toc')
+  } else {
+    document.body.setAttribute('html-show-sidebar-toc', true)
+  }
+})
+</script>
       
-      
-    
-    
-    
-    
-    
-    
   
     </body></html>

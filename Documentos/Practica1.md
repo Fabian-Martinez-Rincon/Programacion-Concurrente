@@ -24,7 +24,13 @@
 
 - Hasta que la condicion `B` no sea verdadera, el proceso que la esta ejecutando, va a estar bloqueado (o en espera), no la pasa de largo, no es lo mismo que un `if` por ejemplo
 - Una vez que es verdadero, se ejecuta la sentencia que esta asociada a esa condicion, estas sentencias se ejecutan de forma atomica
+- Cuando se detecta que es verdadero, empieza la "atomicidad"
 
+```python
+<sentencias>
+```
+
+El protocolo de entrada seria `<` y el protocolo de salida seria `>`
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
