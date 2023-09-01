@@ -33,13 +33,11 @@
 <hr>
 <h4 class="mume-header" id="conceptos-antes-de-empezar-la-practica">Conceptos antes de empezar la practica</h4>
 
-<ul>
-<li>
-<p>Operacion de grano Grueso</p>
-</li>
-<li>
-<p>Operacion de grano Fino</p>
-</li>
+<p><strong>Intrucción atomica</strong>: que solo el proceso que la esta ejecutando la puede modificar (explucion mutua)</p>
+<pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span><span class="token keyword keyword-await">await</span> <span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span> sentencias<span class="token operator">&gt;</span>
+</pre><ul>
+<li>Hasta que la condicion <code>B</code> no sea verdadera, el proceso que la esta ejecutando, va a estar bloqueado (o en espera), no la pasa de largo, no es lo mismo que un <code>if</code> por ejemplo</li>
+<li>Una vez que es verdadero, se ejecuta la sentencia que esta asociada a esa condicion, estas sentencias se ejecutan de forma atomica</li>
 </ul>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
@@ -146,7 +144,52 @@
 <span class="token punctuation">}</span>
 </pre></td></tr>
 </tbody></table>
-<p>b) Modificar el código para que funcione para C consumidores y P productores.</p>
+<p>El código parece intentar resolver el problema del productor-consumidor utilizando un buffer circular, pero hay varios problemas potenciales:</p>
+<p>No hay garantía de exclusión mutua cuando se accede a la variable compartida <code>buffer</code>. Esto puede llevar a condiciones de carrera.</p>
+<table>
+<tbody><tr><td>Productor</td><td>Consumidor</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Productor</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment">//produce elemento </span>
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&lt;</span> <span class="token class-name">N</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">++</span>
+    buffer<span class="token punctuation">[</span>pri_vacia<span class="token punctuation">]</span> <span class="token operator">=</span> elemento<span class="token punctuation">;</span><span class="token operator">&gt;</span>
+    pri_vacia <span class="token operator">=</span> <span class="token punctuation">(</span>pri_vacia <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Consumidor</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">--</span>
+    elemento <span class="token operator">=</span> buffer<span class="token punctuation">[</span>pri_ocupada<span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
+    pri_ocupada <span class="token operator">=</span> <span class="token punctuation">(</span>pri_ocupada <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span> 
+    <span class="token comment">//consume elemento </span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
+<p><em><strong>b) Modificar el código para que funcione para C consumidores y P productores.</strong></em> Preguntar</p>
+<p>En caso de que tengamos N procesos independiente de cada tipo, tenemos que proteger el valor de N, ya que podemos estar usando la variable N en diferentes procesos.</p>
+<table>
+<tbody><tr><td>Productor</td><td>Consumidor</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Productor</span> <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>P<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token operator">:</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment">//produce elemento </span>
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&lt;</span> <span class="token class-name">N</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">++</span>
+    buffer<span class="token punctuation">[</span>pri_vacia<span class="token punctuation">]</span> <span class="token operator">=</span> elemento<span class="token punctuation">;</span>
+    pri_vacia <span class="token operator">=</span> <span class="token punctuation">(</span>pri_vacia <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Consumidor</span> <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>C<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token operator">:</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">--</span>
+    elemento <span class="token operator">=</span> buffer<span class="token punctuation">[</span>pri_ocupada<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    pri_ocupada <span class="token operator">=</span> <span class="token punctuation">(</span>pri_ocupada <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
+    <span class="token comment">//consume elemento </span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-4">Ejercicio 4</h4>
 

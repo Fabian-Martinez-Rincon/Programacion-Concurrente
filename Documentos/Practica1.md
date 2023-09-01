@@ -15,9 +15,16 @@
 ---
 
 #### Conceptos antes de empezar la practica
-- Operacion de grano Grueso
 
-- Operacion de grano Fino
+**Intrucción atomica**: que solo el proceso que la esta ejecutando la puede modificar (explucion mutua)
+
+```python
+<await (B); sentencias>
+```
+
+- Hasta que la condicion `B` no sea verdadera, el proceso que la esta ejecutando, va a estar bloqueado (o en espera), no la pasa de largo, no es lo mismo que un `if` por ejemplo
+- Una vez que es verdadero, se ejecuta la sentencia que esta asociada a esa condicion, estas sentencias se ejecutan de forma atomica
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
@@ -162,7 +169,72 @@ Process Consumidor::{
 </td></tr>
 </table>
 
-b) Modificar el código para que funcione para C consumidores y P productores.
+
+
+El código parece intentar resolver el problema del productor-consumidor utilizando un buffer circular, pero hay varios problemas potenciales:
+
+No hay garantía de exclusión mutua cuando se accede a la variable compartida `buffer`. Esto puede llevar a condiciones de carrera.
+
+<table>
+<tr><td>Productor</td><td>Consumidor</td></tr>
+<tr><td>
+
+```java
+Process Productor::{
+  while (true){ //produce elemento 
+    <await (cant < N); cant++
+    buffer[pri_vacia] = elemento;>
+    pri_vacia = (pri_vacia + 1) mod N;
+  } 
+}
+```
+</td><td>
+
+```java
+Process Consumidor::{
+  while (true) { 
+    <await (cant > 0); cant--
+    elemento = buffer[pri_ocupada];>
+    pri_ocupada = (pri_ocupada + 1) mod N; 
+    //consume elemento 
+  } 
+}
+```
+</td></tr>
+</table>
+
+
+***b) Modificar el código para que funcione para C consumidores y P productores.*** Preguntar
+
+En caso de que tengamos N procesos independiente de cada tipo, tenemos que proteger el valor de N, ya que podemos estar usando la variable N en diferentes procesos. 
+
+<table>
+<tr><td>Productor</td><td>Consumidor</td></tr>
+<tr><td>
+
+```java
+Process Productor [id:0..P-1]:::{
+  while (true){ //produce elemento 
+    <await (cant < N); cant++
+    buffer[pri_vacia] = elemento;
+    pri_vacia = (pri_vacia + 1) mod N;>
+  } 
+}
+```
+</td><td>
+
+```java
+Process Consumidor [id:0..C-1]:::{
+  while (true) { 
+    <await (cant > 0); cant--
+    elemento = buffer[pri_ocupada];
+    pri_ocupada = (pri_ocupada + 1) mod N;>
+    //consume elemento 
+  } 
+}
+```
+</td></tr>
+</table>
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
