@@ -21,7 +21,7 @@
       <div align="center"> <h1> Practica 1 Variables Compartidas</h1></div>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <ul>
-<li><a href="https://github.com/Fabian-Martinez-Rincon/Programacion-Concurrente">Github  de practicas</a></li>
+<li><a href="https://github.com/Fabian-Martinez-Rincon/Programacion-Concurrente">Github con el resto de practicas</a></li>
 <li><a href="#ejercicio-1">Ejercicio 1</a></li>
 <li><a href="#ejercicio-2">Ejercicio 2</a></li>
 <li><a href="#ejercicio-3">Ejercicio 3</a></li>
@@ -30,27 +30,136 @@
 <li><a href="#ejercicio-6">Ejercicio 6</a></li>
 <li><a href="#ejercicio-7">Ejercicio 7</a></li>
 </ul>
+<hr>
+<h4 class="mume-header" id="conceptos-antes-de-empezar-la-practica">Conceptos antes de empezar la practica</h4>
+
+<ul>
+<li>
+<p>Operacion de grano Grueso</p>
+</li>
+<li>
+<p>Operacion de grano Fino</p>
+</li>
+</ul>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
 
+<ol>
+<li>Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas:</li>
+</ol>
+<ul>
+<li>a) En algún caso el valor de x al terminar el programa es 56.</li>
+<li>b) En algún caso el valor de x al terminar el programa es 22.</li>
+<li>c) En algún caso el valor de x al terminar el programa es 23</li>
+</ul>
+<table>
+<tbody><tr><td>P1</td><td>P2</td><td>P3</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java">f <span class="token punctuation">(</span>x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">)</span> then 
+ y<span class="token operator">:</span><span class="token operator">=</span> <span class="token number">4</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">;</span> 
+ x<span class="token operator">:</span><span class="token operator">=</span> y <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">If</span> <span class="token punctuation">(</span>x <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> then 
+  x<span class="token operator">:</span><span class="token operator">=</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java">x<span class="token operator">:</span><span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token operator">*</span><span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>x<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+</pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-2">Ejercicio 2</h4>
 
+<p>Realice una solución concurrente de grano grueso (utilizando &lt;&gt; y/o &lt;await B; S&gt;) para el siguiente problema. Dado un número N verifique cuántas veces aparece ese número en un arreglo de longitud M. Escriba las pre-condiciones que considere necesarias.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-3">Ejercicio 3</h4>
 
+<p>Dada la siguiente solución de grano grueso:</p>
+<p>a) Indicar si el siguiente código funciona para resolver el problema de Productor/Consumidor con un buffer de tamaño N. En caso de no funcionar, debe hacer las modificaciones necesarias</p>
+<h5 class="mume-header" id="variables-compartidas">Variables compartidas</h5>
+
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> pri_ocupada <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> pri_vacia <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> buffer<span class="token punctuation">[</span><span class="token class-name">N</span><span class="token punctuation">]</span><span class="token punctuation">;</span> 
+</pre><table>
+<tbody><tr><td>Productor</td><td>Consumidor</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Productor</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment">//produce elemento </span>
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&lt;</span> <span class="token class-name">N</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">++</span><span class="token operator">&gt;</span>
+    buffer<span class="token punctuation">[</span>pri_vacia<span class="token punctuation">]</span> <span class="token operator">=</span> elemento<span class="token punctuation">;</span>
+    pri_vacia <span class="token operator">=</span> <span class="token punctuation">(</span>pri_vacia <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Consumidor</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>cant <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> cant<span class="token operator">--</span> <span class="token operator">&gt;</span> 
+    elemento <span class="token operator">=</span> buffer<span class="token punctuation">[</span>pri_ocupada<span class="token punctuation">]</span><span class="token punctuation">;</span> 
+    pri_ocupada <span class="token operator">=</span> <span class="token punctuation">(</span>pri_ocupada <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> mod <span class="token class-name">N</span><span class="token punctuation">;</span> 
+    <span class="token comment">//consume elemento </span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
+<p>b) Modificar el código para que funcione para C consumidores y P productores.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-4">Ejercicio 4</h4>
 
+<p>Resolver con</p>
+<ul>
+<li>SENTENCIAS AWAIT (&lt;&gt; y &lt;await B; S&gt;).</li>
+</ul>
+<p>Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola, cuando un proceso necesita usar una instancia del recurso la saca de la cola, la usa y cuando termina de usarla la vuelve a depositar.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-5">Ejercicio 5</h4>
 
+<p>En cada ítem debe realizar una solución concurrente de grano grueso (utilizando &lt;&gt; y/o &lt;await B; S&gt;) para el siguiente problema, teniendo en cuenta las condiciones indicadas en el item. Existen N personas que deben imprimir un trabajo cada una.</p>
+<hr>
+<p>a) Implemente  una  solución  suponiendo  que  existe  una  única  impresora  compartida  por todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso de la impresora. Sólo se deben usar los procesos que representan a las Personas.</p>
+<hr>
+<p>b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.</p>
+<hr>
+<p>c) Modifique la solución de (a) para el caso en que se deba respetar el orden  dado por el identificador  del  proceso  (cuando  está  libre  la  impresora,  de  los  procesos  que han solicitado su uso la debe usar el que tenga menor identificador).</p>
+<hr>
+<p>d) Modifique la solución de (b) para el caso en que además hay un proceso Coordinador que le indica a cada persona que es su turno de usar la impresora</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-6">Ejercicio 6</h4>
 
+<p>Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos (suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan<br>
+en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
+<h5 class="mume-header" id="variable-compartida">Variable compartida</h5>
+
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> turno <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+</pre><table>
+<tbody><tr><td>P1</td><td>P2</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token constant">SC1</span><span class="token operator">::</span><span class="token punctuation">{</span> 
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>turno <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">)</span> skip<span class="token punctuation">;</span>  
+    <span class="token constant">SC</span><span class="token punctuation">;</span> 
+    turno <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> 
+    <span class="token constant">SNC</span><span class="token punctuation">;</span> 
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token constant">SC2</span><span class="token operator">::</span>  
+<span class="token punctuation">{</span> <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> 
+      <span class="token punctuation">{</span>   <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>turno <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> skip<span class="token punctuation">;</span>  
+           <span class="token constant">SC</span><span class="token punctuation">;</span> 
+           turno <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+           <span class="token constant">SNC</span><span class="token punctuation">;</span> 
+       <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-7">Ejercicio 7</h4>
 
+<p>Desarrolle una solución de grano fino usando sólo variables compartidas (no se puede usar las sentencias await ni funciones especiales como TS o FA). En base a lo visto en la clase 3 de teoría, resuelva el problema de acceso a sección crítica usando un proceso coordinador.</p>
+<p>En este caso, cuando un proceso SC[i] quiere entrar a su sección crítica le avisa al coordinador, y espera a que éste le dé permiso. Al terminar de ejecutar su sección crítica, el proceso SC[i] le avisa al coordinador.</p>
+<blockquote>
+<p>Nota: puede basarse en la solución para implementar barreras con “Flags y coordinador” vista en la teoría 3.</p>
+</blockquote>
 
       </div>
       
