@@ -14,7 +14,9 @@
 
 ---
 
-#### Conceptos antes de empezar la practica
+<div align='center'>
+
+#### Conceptos antes de empezar la practica</div>
 
 **Intrucción atomica**: que solo el proceso que la esta ejecutando la puede modificar (explucion mutua)
 
@@ -30,7 +32,19 @@
 <sentencias>
 ```
 
-El protocolo de entrada seria `<` y el protocolo de salida seria `>`
+El protocolo de entrada seria `<` y el protocolo de salida seria `>` y `sentencias` seria la sección critica (zona en la que no pueden estar mas de un proceso a la vez)
+
+- No existe ningun tipo de orden a medida de que los procesos estan esperando a que se libere.
+
+```python
+<await (B);>
+```
+
+El proceso que esta ejecutando esta instruccion, se bloquea hasta que la condicion `B` sea verdadera
+
+<div align='center'>
+
+#### Ejemplos de la practica</div>
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 

@@ -31,8 +31,8 @@
 <li><a href="#ejercicio-7">Ejercicio 7</a></li>
 </ul>
 <hr>
-<h4 class="mume-header" id="conceptos-antes-de-empezar-la-practica">Conceptos antes de empezar la practica</h4>
-
+<div align="center">
+<h4>Conceptos antes de empezar la practica</h4></div>
 <p><strong>Intrucción atomica</strong>: que solo el proceso que la esta ejecutando la puede modificar (explucion mutua)</p>
 <pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span><span class="token keyword keyword-await">await</span> <span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span> sentencias<span class="token operator">&gt;</span>
 </pre><ul>
@@ -41,7 +41,14 @@
 <li>Cuando se detecta que es verdadero, empieza la “atomicidad”</li>
 </ul>
 <pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span>sentencias<span class="token operator">&gt;</span>
-</pre><p>El protocolo de entrada seria <code>&lt;</code> y el protocolo de salida seria <code>&gt;</code></p>
+</pre><p>El protocolo de entrada seria <code>&lt;</code> y el protocolo de salida seria <code>&gt;</code> y <code>sentencias</code> seria la sección critica (zona en la que no pueden estar mas de un proceso a la vez)</p>
+<ul>
+<li>No existe ningun tipo de orden a medida de que los procesos estan esperando a que se libere.</li>
+</ul>
+<pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span><span class="token keyword keyword-await">await</span> <span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
+</pre><p>El proceso que esta ejecutando esta instruccion, se bloquea hasta que la condicion <code>B</code> sea verdadera</p>
+<div align="center">
+<h4>Ejemplos de la practica</h4></div>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
 
@@ -256,10 +263,6 @@ en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
       <div class="md-sidebar-toc">
 <div class="md-toc">
 <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#conceptos-antes-de-empezar-la-practica" class="md-toc-link">
-            <p>Conceptos antes de empezar la practica</p>
-
-          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
           <a href="#ejercicio-1" class="md-toc-link">
             <p>Ejercicio 1</p>
 
