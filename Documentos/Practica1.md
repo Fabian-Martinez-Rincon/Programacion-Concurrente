@@ -15,16 +15,18 @@
 ---
 
 #### Conceptos antes de empezar la practica
+- Operacion de grano Grueso
+
+- Operacion de grano Fino
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 #### Ejercicio 1
 
-1.  Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 
-0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas: 
-a) En algún caso el valor de x al terminar el programa es 56. 
-b) En algún caso el valor de x al terminar el programa es 22. 
-c) En algún caso el valor de x al terminar el programa es 23
+1.  Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas: 
+- a) En algún caso el valor de x al terminar el programa es 56. 
+- b) En algún caso el valor de x al terminar el programa es 22. 
+- c) En algún caso el valor de x al terminar el programa es 23
 
 <table>
 <tr><td>P1</td><td>P2</td><td>P3</td></tr>
@@ -39,7 +41,7 @@ f (x = 0) then
 
 ```java
 If (x > 0) then 
-        x:= x + 1; 
+  x:= x + 1; 
 ```
 </td><td>
 
