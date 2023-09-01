@@ -44,13 +44,22 @@
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
 
-<ol>
-<li>Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas:</li>
-</ol>
+<p>Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas:</p>
+<p><em><strong>a) En algún caso el valor de x al terminar el programa es 56.</strong></em></p>
+<p>Se tienen que ejecutar los procesos P1, P2 y P3 en ese orden y completos para que x valga 56</p>
+<p><em><strong>b) En algún caso el valor de x al terminar el programa es 22.</strong></em></p>
 <ul>
-<li>a) En algún caso el valor de x al terminar el programa es 56.</li>
-<li>b) En algún caso el valor de x al terminar el programa es 22.</li>
-<li>c) En algún caso el valor de x al terminar el programa es 23</li>
+<li>Se ejecuta <code>P3</code> solo <code>x*3</code> incompleto (x= 0*3 = 0)</li>
+<li>Se ejecuta <code>P2</code> Completo dejando x=20</li>
+<li>Se ejecuta lo que queda de <code>P3</code> dejando x= 10*2 + 1 = 21</li>
+<li>Por ultimo se ejecuta <code>P2</code> completo dejando x= 21 + 1 = 22</li>
+</ul>
+<p><em><strong>c) En algún caso el valor de x al terminar el programa es 23</strong></em></p>
+<ul>
+<li>Se ejecuta <code>P3</code> solo <code>x*3</code> incompleto (x= 0*3 = 0)</li>
+<li>Se ejecuta <code>P1</code> Completo dejando x=10</li>
+<li>Se ejecuta <code>P2</code> Completo dejando x=11</li>
+<li>Se ejecuta lo que queda de <code>P3</code> dejando x= 11*2 + 1 = 23</li>
 </ul>
 <table>
 <tbody><tr><td>P1</td><td>P2</td><td>P3</td></tr>
@@ -58,17 +67,53 @@
 <pre data-role="codeBlock" data-info="java" class="language-java">f <span class="token punctuation">(</span>x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">)</span> then 
  y<span class="token operator">:</span><span class="token operator">=</span> <span class="token number">4</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">;</span> 
  x<span class="token operator">:</span><span class="token operator">=</span> y <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token comment">//x = 8 + 2 = 10</span>
+
 </pre></td><td>
 <pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">If</span> <span class="token punctuation">(</span>x <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> then 
   x<span class="token operator">:</span><span class="token operator">=</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+<span class="token comment">//x = 10 + 1 = 11</span>
 </pre></td><td>
 <pre data-role="codeBlock" data-info="java" class="language-java">x<span class="token operator">:</span><span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token operator">*</span><span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>x<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+<span class="token comment">//x = (11*3) + (11*2) + 1 = 56</span>
+
 </pre></td></tr>
 </tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-2">Ejercicio 2</h4>
 
 <p>Realice una solución concurrente de grano grueso (utilizando &lt;&gt; y/o &lt;await B; S&gt;) para el siguiente problema. Dado un número N verifique cuántas veces aparece ese número en un arreglo de longitud M. Escriba las pre-condiciones que considere necesarias.</p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token number">1</span> <span class="token keyword keyword-int">int</span> total <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token number">2</span> <span class="token keyword keyword-int">int</span> arr<span class="token punctuation">[</span><span class="token class-name">M</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token number">3</span> <span class="token class-name">Process</span> <span class="token class-name">Arrays</span><span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token punctuation">.</span>P<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">{</span>
+<span class="token number">4</span>     <span class="token keyword keyword-int">int</span> suma <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token number">5</span>     <span class="token keyword keyword-int">int</span> parte <span class="token operator">=</span> <span class="token class-name">M</span> <span class="token operator">/</span> <span class="token class-name">P</span><span class="token punctuation">;</span>
+<span class="token number">6</span>     <span class="token keyword keyword-int">int</span> extra <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token number">7</span>     <span class="token keyword keyword-int">int</span> inicio <span class="token operator">=</span> id <span class="token operator">*</span> parte<span class="token punctuation">;</span>
+  
+<span class="token number">8</span>     <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>id <span class="token operator">==</span> <span class="token class-name">P</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token number">9</span>         extra <span class="token operator">=</span> <span class="token class-name">M</span> mod <span class="token class-name">P</span><span class="token punctuation">;</span>
+<span class="token number">10</span>    <span class="token punctuation">}</span>
+
+<span class="token number">11</span>    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> inicio<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> inicio <span class="token operator">+</span> parte <span class="token operator">+</span> extra<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token number">12</span>        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token class-name">N</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token number">13</span>            suma<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token number">14</span>        <span class="token punctuation">}</span>
+<span class="token number">15</span>    <span class="token punctuation">}</span>
+
+<span class="token number">16</span>    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>suma <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token number">17</span>        <span class="token operator">&lt;</span>total <span class="token operator">+=</span> suma<span class="token operator">&gt;</span>
+<span class="token number">18</span>    <span class="token punctuation">}</span>
+<span class="token number">19</span> <span class="token punctuation">}</span>
+</pre><p><em><strong>Ejemplo</strong></em></p>
+<p>Supongamos que tienes un arreglo de 100 elementos (<code>M = 100</code>) y tienes 4 procesos (<code>P = 4</code>).</p>
+<ul>
+<li>Cada proceso manejaría 100 / 4 = 25 elementos del arreglo.</li>
+</ul>
+<p>En este caso, la variable <code>parte</code> sería 25.</p>
+<p><em><strong>Nota sobre <code>extra</code></strong></em></p>
+<p>La variable <code>extra</code> maneja el caso en que <code>M</code> no es un múltiplo exacto de <code>P</code>. Si tienes, por ejemplo, un arreglo de 103 elementos y 4 procesos, entonces <code>parte = 103 / 4 = 25</code>, y tendrías un <code>extra = 103 mod 4 = 3</code>. Este <code>extra</code> se añade al último proceso para asegurar que todos los elementos del arreglo se procesen.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-3">Ejercicio 3</h4>
 

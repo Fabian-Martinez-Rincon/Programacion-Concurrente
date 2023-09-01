@@ -23,10 +23,26 @@
 
 #### Ejercicio 1
 
-1.  Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas: 
-- a) En algún caso el valor de x al terminar el programa es 56. 
-- b) En algún caso el valor de x al terminar el programa es 22. 
-- c) En algún caso el valor de x al terminar el programa es 23
+Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas: 
+
+***a) En algún caso el valor de x al terminar el programa es 56.***
+
+Se tienen que ejecutar los procesos P1, P2 y P3 en ese orden y completos para que x valga 56
+
+***b) En algún caso el valor de x al terminar el programa es 22.***
+
+- Se ejecuta `P3` solo `x*3` incompleto (x= 0*3 = 0)
+- Se ejecuta `P2` Completo dejando x=20
+- Se ejecuta lo que queda de `P3` dejando x= 10*2 + 1 = 21
+- Por ultimo se ejecuta `P2` completo dejando x= 21 + 1 = 22
+
+***c) En algún caso el valor de x al terminar el programa es 23***
+
+- Se ejecuta `P3` solo `x*3` incompleto (x= 0*3 = 0)
+- Se ejecuta `P1` Completo dejando x=10
+- Se ejecuta `P2` Completo dejando x=11
+- Se ejecuta lo que queda de `P3` dejando x= 11*2 + 1 = 23
+
 
 <table>
 <tr><td>P1</td><td>P2</td><td>P3</td></tr>
@@ -36,17 +52,22 @@
 f (x = 0) then 
  y:= 4*2; 
  x:= y + 2;
+//x = 8 + 2 = 10
+
 ```
 </td><td>
 
 ```java
 If (x > 0) then 
   x:= x + 1; 
+//x = 10 + 1 = 11
 ```
 </td><td>
 
 ```java
 x:= (x*3) + (x*2) + 1; 
+//x = (11*3) + (11*2) + 1 = 56
+
 ```
 </td></tr>
 </table>
@@ -56,6 +77,45 @@ x:= (x*3) + (x*2) + 1;
 #### Ejercicio 2
 
 Realice una solución concurrente de grano grueso (utilizando <> y/o <await B; S>) para el siguiente problema. Dado un número N verifique cuántas veces aparece ese número en un arreglo de longitud M. Escriba las pre-condiciones que considere necesarias.
+
+```java
+1 int total = 0;
+2 int arr[M];
+
+3 Process Arrays[id: 0..P-1] {
+4     int suma = 0;
+5     int parte = M / P;
+6     int extra = 0;
+7     int inicio = id * parte;
+  
+8     if (id == P-1) {
+9         extra = M mod P;
+10    }
+
+11    for (i = inicio; i < inicio + parte + extra; i++) {
+12        if (arr[i] == N) {
+13            suma++;
+14        }
+15    }
+
+16    if (suma != 0) {
+17        <total += suma>
+18    }
+19 }
+```
+***Ejemplo***
+
+Supongamos que tienes un arreglo de 100 elementos (`M = 100`) y tienes 4 procesos (`P = 4`).
+
+- Cada proceso manejaría 100 / 4 = 25 elementos del arreglo.
+
+En este caso, la variable `parte` sería 25.
+
+***Nota sobre `extra`***
+
+La variable `extra` maneja el caso en que `M` no es un múltiplo exacto de `P`. Si tienes, por ejemplo, un arreglo de 103 elementos y 4 procesos, entonces `parte = 103 / 4 = 25`, y tendrías un `extra = 103 mod 4 = 3`. Este `extra` se añade al último proceso para asegurar que todos los elementos del arreglo se procesen.
+
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
