@@ -42,15 +42,102 @@ El protocolo de entrada seria `<` y el protocolo de salida seria `>` y `sentenci
 
 El proceso que esta ejecutando esta instruccion, se bloquea hasta que la condicion `B` sea verdadera
 
-<div align='center'>
+---
 
-#### Ejemplos de la practica</div>
+#### Ejemplos de la practica
+
+##### Ejercicio 1
+Se tiene un salón con cuatro puertas por donde entran los alumnos a un examen.
+Cada puerta lleva la cuenta de los que entraron por ella y a su vez se lleva la cuenta del total de personas en el salón.
+
+```java
+int Total = 0;
+Process Puerta[id: 0..3]{ 
+  int Parcial = 0;
+  while (true){ 
+    //esperar llegada
+    Parcial = Parcial + 1;
+    <Total= Total + 1>;
+  }
+}
+```
+
+##### Ejercicio 2
+
+Hay un docente que les debe tomar examen oral a 30 alumnos (de a uno a la vez) de acuerdo al orden dado por el Identificador del proceso
+
+***Variables Compartidas***
+
+```java
+int Actual = -1; 
+bool Listo = False, Ok = false;
+```
+
+<table>
+<tr><td>Alumno</td><td>Docente</td></tr>
+<tr><td>
+
+```java
+Process Alumno [id: 0..29]{ 
+  <await (Actual == id)>;
+  Ok = true;
+  //Rinde el examen
+  <await (Listo)>;
+  Listo = false;
+}
+```
+</td><td>
+
+```java
+Process Docente{ 
+  for i = 0..29 {
+    Actual = i<await (Ok)>; 
+    Ok = false;
+    //Toma el examen
+    Listo = true;
+    <await (not Listo)>;
+  }
+}
+```
+</td></tr>
+</table>
+
+
+##### Ejercicio 3
+
+Un cajero automático debe ser usado por ***N personas*** de a uno a la vez y según
+el orden de llegada al mismo. En caso de que llegue una persona anciana, la
+deben dejar ubicarse al principio de la cola.
+
+> Vamos a suponer que existe una estructura de datos “colaEspecial” con una función “Agregar(edad, id)” que dependiendo de ese valor lo inserta la tupla al principio o al final de la cola; y existe una función “Sacar” que devuelve el id de quien está al principio en la cola.
+
+```java
+//Variables compartidas
+colaEspecial C;
+int Siguiente = -1;
+
+Process Persona [id: 0..N-1]{ 
+  int edad = ....;
+
+  <if (Siguiente = -1) 
+    Siguiente = id
+  else 
+    Agregar(C, edad, id)>;
+
+  <await (Siguiente == id)>;
+  //Usa el cajero
+  <if (empty(C)) 
+    Siguiente = -1
+  else 
+    Siguiente = Sacar(C)>;
+}
+```
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 #### Ejercicio 1
 
-Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas: 
+Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas:
 
 ***a) En algún caso el valor de x al terminar el programa es 56.***
 
@@ -260,39 +347,197 @@ Process Consumidor [id:0..C-1]:::{
 
 #### Ejercicio 4
 
-Resolver con 
-- SENTENCIAS AWAIT (<> y <await B; S>).
+Resolver con:
+
+```java
+SENTENCIAS AWAIT (<> y <await B; S>).
+```
 
 Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola, cuando un proceso necesita usar una instancia del recurso la saca de la cola, la usa y cuando termina de usarla la vuelve a depositar.
+
+```java
+Inicializar colaEspecial C con 5 instancias de recurso;
+
+Process Consumidor[id: 0..N-1] {
+  Declarar variable T "rec";
+  while(true) {
+    <await !empty(C); //Espera a que haya un recurso disponible
+      rec = Sacar(C)
+    >
+    Usar recurso (alguna acción con "rec");
+    <Agregar(C, rec)>
+  }
+}
+```
+
+- **1)** Cada proceso `Consumidor` funciona en un bucle infinito (`while(true)`).
+- **2)** El proceso espera (`AWAIT`) hasta que la cola `C` no esté vacía (`!empty(C)`).
+- **3)** Una vez que la cola tiene al menos un recurso, el proceso saca (`Sacar`) un recurso de la cola y lo asigna a la variable `rec`.
+- **4)** El recurso se usa (`usar recurso`).
+- **5)** Después de usar el recurso, se agrega (`Agregar`) de nuevo a la cola `C` para que otros procesos puedan usarlo.
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 #### Ejercicio 5
 
-En cada ítem debe realizar una solución concurrente de grano grueso (utilizando <> y/o <await B; S>) para el siguiente problema, teniendo en cuenta las condiciones indicadas en el item. Existen N personas que deben imprimir un trabajo cada una.
+En cada ítem debe realizar una solución concurrente de grano grueso `(utilizando <> y/o <await B; S>)` para el siguiente problema:
+
+- Existen `N` personas que deben imprimir un trabajo cada una.
 
 ---
 
-a) Implemente  una  solución  suponiendo  que  existe  una  única  impresora  compartida  por todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso de la impresora. Sólo se deben usar los procesos que representan a las Personas.
+a) Implemente una solución suponiendo que existe una única impresora compartida por todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso de la impresora. Sólo se deben usar los procesos que representan a las Personas.
+
+```java
+// Indica si la impresora está libre o no
+bool libre = true;
+Process Persona[id: 0..N-1] {
+  while(true) {
+    <await libre; 
+      libre = false; 
+      Imprimir(documento); 
+      libre = true
+    >
+  }
+}
+```
+
+
+- **1)** La variable `libre` se inicializa en `true`, lo que indica que la impresora está disponible.
+- **2)** Cada persona entra en un bucle infinito para imprimir documentos.
+- **3)** Usamos la sentencia `<await libre; libre = false; Imprimir(documento); libre = true>` para hacer que el proceso espere hasta que `libre` sea `true`. Una vez que eso sucede, la variable `libre` se establece en `false` para bloquear la impresora, se realiza la acción de imprimir (`Imprimir(documento)`), y luego se libera la impresora estableciendo `libre` nuevamente en `true`.
+
+Con este diseño, nos aseguramos de que solo una persona a la vez pueda utilizar la impresora.
 
 ---
 
 b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.
 
+```java
+cola C;
+bool libre = true; 
+int sig=-1;
+Process Persona[id:0..P-1]::{
+  <if (sig=-1) 
+    sig=id
+  else 
+    Agregar(C,id)>;
+  <await (sig==id)>;
+  <await libre; 
+    libre = false;
+    Imprimir(documento);
+    libre = true
+  >
+  <if(empty(C) 
+     sig=-1;
+  else 
+     sig=Sacar(C)>;
+}
+```
+
+- **Inicialización**: La cola `C` está vacía, `libre` es `true`, y `sig` es `-1`.
+- **Cuando una Persona llega**: 
+  - Si `sig` es `-1`, entonces esta Persona se convierte en la siguiente (**sig = id**).
+  - De lo contrario, se añade su `id` a la cola `C`.
+- **Esperando para imprimir**: Cada Persona espera hasta que su `id` sea igual a `sig`.
+- **Imprimiendo**: Una vez que `sig` es igual al `id` de la Persona y la impresora está libre (`libre = true`), la Persona imprime su documento.
+- **Liberar la cola**:
+  - Si la cola `C` está vacía, `sig` se vuelve `-1`.
+  - Si no, `sig` se convierte en el `id` que está en el frente de la cola, y se saca ese `id` de la cola.
+
 ---
 
-c) Modifique la solución de (a) para el caso en que se deba respetar el orden  dado por el identificador  del  proceso  (cuando  está  libre  la  impresora,  de  los  procesos  que han solicitado su uso la debe usar el que tenga menor identificador). 
+c) Modifique la solución de (a) para el caso en que se deba respetar el orden dado por el identificador del proceso (cuando está libre la impresora, de los procesos que han solicitado su uso la debe usar el que tenga menor identificador)
+
+```java
+cola C;
+bool libre = true; 
+int sig=-1;
+Process Persona[id:0..P-1]::{
+  <if (sig=-1) 
+    sig=id
+  else 
+    AgregarOrdenado(C,id)>; //A chequear
+  <await (sig==id)>;
+  <await libre; 
+    libre = false; 
+    Imprimir(documento); 
+    libre = true
+  >
+  <if(empty(C) 
+    sig=-1;
+  else 
+    sig=Sacar(C)>;
+}
+```
+
+Esta solución es muy similar a la anterior, pero con una diferencia clave:
+
+- En lugar de añadir el `id` al final de la cola, se inserta en un lugar que mantenga el orden ascendente de los `id` en la cola. Por lo tanto, el `id` más pequeño siempre estará en el frente.
 
 ---
 
 d) Modifique la solución de (b) para el caso en que además hay un proceso Coordinador que le indica a cada persona que es su turno de usar la impresora
 
+#### Variables compartidas
+
+```java
+libre=true;
+int siguiente=-1
+```
+
+<table>
+<tr><td>Personas</td><td>Cordinador</td></tr>
+<tr><td>
+
+```java
+Process Persona[1..N]::{
+  <Agregar(C,id);>
+  <await (siguiente==id)>;
+  <await libre; 
+     libre = false; 
+     Imprimir(documento); 
+     libre = true
+   >
+}
+```
+</td><td>
+
+```java
+Process Coordinador::{
+  int sig
+  while(true){
+    <await !empty(C); sig=Sacar(C)>
+    <await libre; 
+      libre=false>
+    siguiente=sig
+    <libre=true>
+    }
+ }
+```
+
+</td></tr>
+</table>
+
+**Inicialización**: `libre` es `true` y `siguiente` es `-1`.
+
+*Personas*
+- **Cuando una Persona llega**: Añade su `id` a la cola `C`.
+- **Esperando para imprimir**: Cada Persona espera hasta que su `id` sea igual a `siguiente`.
+- **Imprimiendo**: Una vez que `siguiente` es igual al `id` de la Persona y **libre = true**, la Persona imprime su documento.
+
+*Coordinador*
+- **Elegir siguiente Persona**: 
+  - El Coordinador espera hasta que la cola `C` no esté vacía y la impresora esté libre.
+  - Saca el `id` del frente de la cola y lo asigna a `siguiente`.
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 #### Ejercicio 6
 
-Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos (suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan 
-en algún momento), indicar si cumple con las 4 condiciones requeridas
+Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos (suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan en algún momento), indicar si cumple con las 4 condiciones requeridas
 
 ##### Variable compartida
 ```java
@@ -316,17 +561,36 @@ Process SC1::{
 </td><td>
 
 ```java
-Process SC2::  
-{ while (true) 
-      {   while (turno == 1) skip;  
-           SC; 
-           turno = 1; 
-           SNC; 
-       } 
+Process SC2::{ 
+  while (true) {
+    while (turno == 1) skip;
+      SC; 
+      turno = 1; 
+      SNC; 
+  } 
 }
 ```
 </td></tr>
 </table>
+
+
+
+#### 1. Exclusión Mutua ✔️
+
+En este código, la variable compartida `turno` se utiliza para garantizar que solo un proceso puede estar en su sección crítica (`SC`) en un momento dado. Si `turno` es `1`, entonces `P1` puede entrar en su `SC`, y `P2` no puede (y viceversa). Así que esta condición se cumple.
+
+#### 2. Ausencia de Deadlock (o Livelock)✔️
+
+No hay deadlock en este diseño, ya que siempre hay un `turno` específico en el que uno de los procesos puede entrar en su `SC`. En el peor de los casos, tendrían que esperar a que el otro proceso termine su `SC` para entrar en la suya. Por lo tanto, esta condición también se cumple.
+
+#### 3. Ausencia de Demora Innecesaria ❌
+
+La ausencia de demora innecesaria podría no cumplirse completamente. Imagina un escenario en el que el proceso P1 entra y sale de su SC muy rápidamente en comparación con P2. P2 tendría que esperar a que P1 complete su SC y cambie el turno, incluso si P1 pudiera funcionar eficazmente en su sección no crítica. Esto podría considerarse una demora "innecesaria" para P2.
+
+#### 4. Eventual Entrada ✔️
+
+El diseño asegura que si un proceso intenta entrar en su `SC`, eventualmente podrá hacerlo. Esto se debe a que el "turno" cambia después de que un proceso sale de su `SC`, permitiendo al otro proceso entrar en su `SC`. Entonces, esta condición también se cumple.
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
@@ -339,8 +603,110 @@ En este caso, cuando un proceso SC[i] quiere entrar a su sección crítica le av
 
 >Nota: puede basarse en la solución para implementar barreras con “Flags y coordinador” vista en la teoría 3. 
 
+##### Variables compartidas
 
+```java
+bool libre= true;
+int arribo[1:n]]=([n] false)
+```
 
+<table><tr><td>Procesos</td><td>Cordinador</td></tr>
+<tr><td>
 
+```java
+Process Proceso[id:1..N]:: {
+  while (true) {
+    arribo[id] = true
+    while (arribo[id]) { skip };
+    SC
+    libre=true;
+    SNC
+  }
+}
+```
+</td><td>
 
+```java
+Process Coordinador:: {
+  while(true) {
+    for [i=1 to n st arribo[i]==true]{
+      while (not libre) skip;
+      libre=false;
+      arribo[i] = false;
+    }
+  }
+}
+```
+</td></tr></table>
 
+#### Procesos
+- Cada proceso avisa que quiere entrar a su sección crítica (`SC`) poniendo `arribo[id] = true`.
+- Espera hasta que el coordinador ponga `arribo[id] = false`.
+- Después de ejecutar su `SC`, pone `libre = true`.
+
+#### Coordinador
+- Busca procesos que hayan llegado (`arribo[i] == true`).
+- Espera a que el recurso esté `libre`.
+- Pone `libre = false` y `arribo[i] = false` para permitir al proceso entrar a su `SC`.
+
+**Pros**: 
+- Simple de entender.
+
+**Contras**: 
+- Se podrían generar condiciones de carrera porque no hay mecanismos de exclusión mutua reales para proteger la variable `libre` y el arreglo `arribo`.
+
+### Otra solución
+
+```java
+int next=-1;
+int arribo[1:n]=([n] false)
+```
+
+<table>
+<tr><td>Procesos</td><td>Cordinador</td></tr>
+<tr><td>
+
+```java
+Process Proceso[id:1..N]:: {
+  while (true){
+    arribo[id] = true
+    while (id != next) { skip };
+    SC
+    next = -1;
+    SNC
+  }
+}
+```
+</td><td>
+
+```java
+Process Coordinador:: {
+  while(true){
+    for [i=1 to n st arribo[i]==true]{
+      while (next!=-1) skip;
+      arribo[i] = false;
+      next = i;
+    }
+  }
+}
+```
+</td></tr>
+</table>
+
+#### Procesos
+- Cada proceso avisa que quiere entrar a su `SC` poniendo `arribo[id] = true`.
+- Espera hasta que `next = id`.
+- Después de su `SC`, pone `next = -1`.
+
+#### Coordinador
+- Busca procesos que hayan llegado (`arribo[i] == true`).
+- Espera hasta que `next = -1`.
+- Pone `arribo[i] = false` y `next = i`.
+
+**Pros**: 
+- Más estructurada que la primera.
+
+**Contras**: 
+- Al igual que la primera solución, podría tener condiciones de carrera.
+
+> Ambas soluciones intentan ofrecer una implementación de grano fino pero no garantizan la exclusión mutua en el acceso a las variables compartidas, lo que podría llevar a condiciones de carrera. Podrían funcionar en un ambiente ideal donde estas condiciones de carrera no ocurran, pero no son soluciones robustas para todos los escenarios posibles.

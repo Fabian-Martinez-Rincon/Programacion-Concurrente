@@ -47,10 +47,79 @@
 </ul>
 <pre data-role="codeBlock" data-info="python" class="language-python"><span class="token operator">&lt;</span><span class="token keyword keyword-await">await</span> <span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
 </pre><p>El proceso que esta ejecutando esta instruccion, se bloquea hasta que la condicion <code>B</code> sea verdadera</p>
-<div align="center">
-<h4>Ejemplos de la practica</h4></div>
-<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
-<h4 class="mume-header" id="ejercicio-1">Ejercicio 1</h4>
+<hr>
+<h4 class="mume-header" id="ejemplos-de-la-practica">Ejemplos de la practica</h4>
+
+<h5 class="mume-header" id="ejercicio-1">Ejercicio 1</h5>
+
+<p>Se tiene un salón con cuatro puertas por donde entran los alumnos a un examen.<br>
+Cada puerta lleva la cuenta de los que entraron por ella y a su vez se lleva la cuenta del total de personas en el salón.</p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> <span class="token class-name">Total</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token class-name">Process</span> <span class="token class-name">Puerta</span><span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token number">.3</span><span class="token punctuation">]</span><span class="token punctuation">{</span> 
+  <span class="token keyword keyword-int">int</span> <span class="token class-name">Parcial</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span> 
+    <span class="token comment">//esperar llegada</span>
+    <span class="token class-name">Parcial</span> <span class="token operator">=</span> <span class="token class-name">Parcial</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span><span class="token class-name">Total</span><span class="token operator">=</span> <span class="token class-name">Total</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h5 class="mume-header" id="ejercicio-2">Ejercicio 2</h5>
+
+<p>Hay un docente que les debe tomar examen oral a 30 alumnos (de a uno a la vez) de acuerdo al orden dado por el Identificador del proceso</p>
+<p><em><strong>Variables Compartidas</strong></em></p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> <span class="token class-name">Actual</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> 
+bool <span class="token class-name">Listo</span> <span class="token operator">=</span> <span class="token class-name">False</span><span class="token punctuation">,</span> <span class="token class-name">Ok</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+</pre><table>
+<tbody><tr><td>Alumno</td><td>Docente</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Alumno</span> <span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token number">.29</span><span class="token punctuation">]</span><span class="token punctuation">{</span> 
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span><span class="token class-name">Actual</span> <span class="token operator">==</span> id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token class-name">Ok</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+  <span class="token comment">//Rinde el examen</span>
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span><span class="token class-name">Listo</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token class-name">Listo</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Docente</span><span class="token punctuation">{</span> 
+  <span class="token keyword keyword-for">for</span> i <span class="token operator">=</span> <span class="token number">0.</span><span class="token number">.29</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Actual</span> <span class="token operator">=</span> i<span class="token operator">&lt;</span>await <span class="token punctuation">(</span><span class="token class-name">Ok</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span> 
+    <span class="token class-name">Ok</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token comment">//Toma el examen</span>
+    <span class="token class-name">Listo</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>not <span class="token class-name">Listo</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
+<h5 class="mume-header" id="ejercicio-3">Ejercicio 3</h5>
+
+<p>Un cajero automático debe ser usado por <em><strong>N personas</strong></em> de a uno a la vez y según<br>
+el orden de llegada al mismo. En caso de que llegue una persona anciana, la<br>
+deben dejar ubicarse al principio de la cola.</p>
+<blockquote>
+<p>Vamos a suponer que existe una estructura de datos “colaEspecial” con una función “Agregar(edad, id)” que dependiendo de ese valor lo inserta la tupla al principio o al final de la cola; y existe una función “Sacar” que devuelve el id de quien está al principio en la cola.</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token comment">//Variables compartidas</span>
+colaEspecial <span class="token class-name">C</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> <span class="token class-name">Siguiente</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Process</span> <span class="token class-name">Persona</span> <span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span> 
+  <span class="token keyword keyword-int">int</span> edad <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">;</span>
+
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token class-name">Siguiente</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> 
+    <span class="token class-name">Siguiente</span> <span class="token operator">=</span> id
+  <span class="token keyword keyword-else">else</span> 
+    <span class="token class-name">Agregar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">,</span> edad<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span><span class="token class-name">Siguiente</span> <span class="token operator">==</span> id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token comment">//Usa el cajero</span>
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token punctuation">)</span> 
+    <span class="token class-name">Siguiente</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+  <span class="token keyword keyword-else">else</span> 
+    <span class="token class-name">Siguiente</span> <span class="token operator">=</span> <span class="token class-name">Sacar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</pre><img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h4 class="mume-header" id="ejercicio-1-1">Ejercicio 1</h4>
 
 <p>Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. Indique cual/es de las siguientes opciones son verdaderas:</p>
 <p><em><strong>a) En algún caso el valor de x al terminar el programa es 56.</strong></em></p>
@@ -88,7 +157,7 @@
 </pre></td></tr>
 </tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
-<h4 class="mume-header" id="ejercicio-2">Ejercicio 2</h4>
+<h4 class="mume-header" id="ejercicio-2-1">Ejercicio 2</h4>
 
 <p>Realice una solución concurrente de grano grueso (utilizando &lt;&gt; y/o &lt;await B; S&gt;) para el siguiente problema. Dado un número N verifique cuántas veces aparece ese número en un arreglo de longitud M. Escriba las pre-condiciones que considere necesarias.</p>
 <pre data-role="codeBlock" data-info="java" class="language-java"><span class="token number">1</span> <span class="token keyword keyword-int">int</span> total <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -123,7 +192,7 @@
 <p><em><strong>Nota sobre <code>extra</code></strong></em></p>
 <p>La variable <code>extra</code> maneja el caso en que <code>M</code> no es un múltiplo exacto de <code>P</code>. Si tienes, por ejemplo, un arreglo de 103 elementos y 4 procesos, entonces <code>parte = 103 / 4 = 25</code>, y tendrías un <code>extra = 103 mod 4 = 3</code>. Este <code>extra</code> se añade al último proceso para asegurar que todos los elementos del arreglo se procesen.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
-<h4 class="mume-header" id="ejercicio-3">Ejercicio 3</h4>
+<h4 class="mume-header" id="ejercicio-3-1">Ejercicio 3</h4>
 
 <p>Dada la siguiente solución de grano grueso:</p>
 <p>a) Indicar si el siguiente código funciona para resolver el problema de Productor/Consumidor con un buffer de tamaño N. En caso de no funcionar, debe hacer las modificaciones necesarias</p>
@@ -203,28 +272,168 @@
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-4">Ejercicio 4</h4>
 
-<p>Resolver con</p>
-<ul>
-<li>SENTENCIAS AWAIT (&lt;&gt; y &lt;await B; S&gt;).</li>
+<p>Resolver con:</p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">SENTENCIAS</span> <span class="token constant">AWAIT</span> <span class="token punctuation">(</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span> y <span class="token operator">&lt;</span>await <span class="token class-name">B</span><span class="token punctuation">;</span> <span class="token class-name">S</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+</pre><p>Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola, cuando un proceso necesita usar una instancia del recurso la saca de la cola, la usa y cuando termina de usarla la vuelve a depositar.</p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Inicializar</span> colaEspecial <span class="token class-name">C</span> con <span class="token number">5</span> instancias de recurso<span class="token punctuation">;</span>
+
+<span class="token class-name">Process</span> <span class="token class-name">Consumidor</span><span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Declarar</span> variable <span class="token class-name">T</span> <span class="token string">"rec"</span><span class="token punctuation">;</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">&lt;</span>await <span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//Espera a que haya un recurso disponible</span>
+      rec <span class="token operator">=</span> <span class="token class-name">Sacar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span>
+    <span class="token operator">&gt;</span>
+    <span class="token class-name">Usar</span> recurso <span class="token punctuation">(</span>alguna acción con <span class="token string">"rec"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span><span class="token class-name">Agregar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">,</span> rec<span class="token punctuation">)</span><span class="token operator">&gt;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li><strong>1)</strong> Cada proceso <code>Consumidor</code> funciona en un bucle infinito (<code>while(true)</code>).</li>
+<li><strong>2)</strong> El proceso espera (<code>AWAIT</code>) hasta que la cola <code>C</code> no esté vacía (<code>!empty(C)</code>).</li>
+<li><strong>3)</strong> Una vez que la cola tiene al menos un recurso, el proceso saca (<code>Sacar</code>) un recurso de la cola y lo asigna a la variable <code>rec</code>.</li>
+<li><strong>4)</strong> El recurso se usa (<code>usar recurso</code>).</li>
+<li><strong>5)</strong> Después de usar el recurso, se agrega (<code>Agregar</code>) de nuevo a la cola <code>C</code> para que otros procesos puedan usarlo.</li>
 </ul>
-<p>Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola, cuando un proceso necesita usar una instancia del recurso la saca de la cola, la usa y cuando termina de usarla la vuelve a depositar.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-5">Ejercicio 5</h4>
 
-<p>En cada ítem debe realizar una solución concurrente de grano grueso (utilizando &lt;&gt; y/o &lt;await B; S&gt;) para el siguiente problema, teniendo en cuenta las condiciones indicadas en el item. Existen N personas que deben imprimir un trabajo cada una.</p>
+<p>En cada ítem debe realizar una solución concurrente de grano grueso <code>(utilizando &lt;&gt; y/o &lt;await B; S&gt;)</code> para el siguiente problema:</p>
+<ul>
+<li>Existen <code>N</code> personas que deben imprimir un trabajo cada una.</li>
+</ul>
 <hr>
-<p>a) Implemente  una  solución  suponiendo  que  existe  una  única  impresora  compartida  por todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso de la impresora. Sólo se deben usar los procesos que representan a las Personas.</p>
+<p>a) Implemente una solución suponiendo que existe una única impresora compartida por todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso de la impresora. Sólo se deben usar los procesos que representan a las Personas.</p>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token comment">// Indica si la impresora está libre o no</span>
+bool libre <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token class-name">Process</span> <span class="token class-name">Persona</span><span class="token punctuation">[</span>id<span class="token operator">:</span> <span class="token number">0.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">&lt;</span>await libre<span class="token punctuation">;</span> 
+      libre <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> 
+      <span class="token class-name">Imprimir</span><span class="token punctuation">(</span>documento<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+      libre <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token operator">&gt;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li><strong>1)</strong> La variable <code>libre</code> se inicializa en <code>true</code>, lo que indica que la impresora está disponible.</li>
+<li><strong>2)</strong> Cada persona entra en un bucle infinito para imprimir documentos.</li>
+<li><strong>3)</strong> Usamos la sentencia <code>&lt;await libre; libre = false; Imprimir(documento); libre = true&gt;</code> para hacer que el proceso espere hasta que <code>libre</code> sea <code>true</code>. Una vez que eso sucede, la variable <code>libre</code> se establece en <code>false</code> para bloquear la impresora, se realiza la acción de imprimir (<code>Imprimir(documento)</code>), y luego se libera la impresora estableciendo <code>libre</code> nuevamente en <code>true</code>.</li>
+</ul>
+<p>Con este diseño, nos aseguramos de que solo una persona a la vez pueda utilizar la impresora.</p>
 <hr>
 <p>b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.</p>
+<pre data-role="codeBlock" data-info="java" class="language-java">cola <span class="token class-name">C</span><span class="token punctuation">;</span>
+bool libre <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> 
+<span class="token keyword keyword-int">int</span> sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token class-name">Process</span> <span class="token class-name">Persona</span><span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>P<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> 
+    sig<span class="token operator">=</span>id
+  <span class="token keyword keyword-else">else</span> 
+    <span class="token class-name">Agregar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>sig<span class="token operator">==</span>id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token operator">&lt;</span>await libre<span class="token punctuation">;</span> 
+    libre <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token class-name">Imprimir</span><span class="token punctuation">(</span>documento<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    libre <span class="token operator">=</span> <span class="token boolean">true</span>
+  <span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span> 
+     sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword keyword-else">else</span> 
+     sig<span class="token operator">=</span><span class="token class-name">Sacar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</pre><ul>
+<li><strong>Inicialización</strong>: La cola <code>C</code> está vacía, <code>libre</code> es <code>true</code>, y <code>sig</code> es <code>-1</code>.</li>
+<li><strong>Cuando una Persona llega</strong>:
+<ul>
+<li>Si <code>sig</code> es <code>-1</code>, entonces esta Persona se convierte en la siguiente (<strong>sig = id</strong>).</li>
+<li>De lo contrario, se añade su <code>id</code> a la cola <code>C</code>.</li>
+</ul>
+</li>
+<li><strong>Esperando para imprimir</strong>: Cada Persona espera hasta que su <code>id</code> sea igual a <code>sig</code>.</li>
+<li><strong>Imprimiendo</strong>: Una vez que <code>sig</code> es igual al <code>id</code> de la Persona y la impresora está libre (<code>libre = true</code>), la Persona imprime su documento.</li>
+<li><strong>Liberar la cola</strong>:
+<ul>
+<li>Si la cola <code>C</code> está vacía, <code>sig</code> se vuelve <code>-1</code>.</li>
+<li>Si no, <code>sig</code> se convierte en el <code>id</code> que está en el frente de la cola, y se saca ese <code>id</code> de la cola.</li>
+</ul>
+</li>
+</ul>
 <hr>
-<p>c) Modifique la solución de (a) para el caso en que se deba respetar el orden  dado por el identificador  del  proceso  (cuando  está  libre  la  impresora,  de  los  procesos  que han solicitado su uso la debe usar el que tenga menor identificador).</p>
+<p>c) Modifique la solución de (a) para el caso en que se deba respetar el orden dado por el identificador del proceso (cuando está libre la impresora, de los procesos que han solicitado su uso la debe usar el que tenga menor identificador)</p>
+<pre data-role="codeBlock" data-info="java" class="language-java">cola <span class="token class-name">C</span><span class="token punctuation">;</span>
+bool libre <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> 
+<span class="token keyword keyword-int">int</span> sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token class-name">Process</span> <span class="token class-name">Persona</span><span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>P<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> 
+    sig<span class="token operator">=</span>id
+  <span class="token keyword keyword-else">else</span> 
+    <span class="token class-name">AgregarOrdenado</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span> <span class="token comment">//A chequear</span>
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>sig<span class="token operator">==</span>id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token operator">&lt;</span>await libre<span class="token punctuation">;</span> 
+    libre <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> 
+    <span class="token class-name">Imprimir</span><span class="token punctuation">(</span>documento<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    libre <span class="token operator">=</span> <span class="token boolean">true</span>
+  <span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span> 
+    sig<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword keyword-else">else</span> 
+    sig<span class="token operator">=</span><span class="token class-name">Sacar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</pre><p>Esta solución es muy similar a la anterior, pero con una diferencia clave:</p>
+<ul>
+<li>En lugar de añadir el <code>id</code> al final de la cola, se inserta en un lugar que mantenga el orden ascendente de los <code>id</code> en la cola. Por lo tanto, el <code>id</code> más pequeño siempre estará en el frente.</li>
+</ul>
 <hr>
 <p>d) Modifique la solución de (b) para el caso en que además hay un proceso Coordinador que le indica a cada persona que es su turno de usar la impresora</p>
+<h4 class="mume-header" id="variables-compartidas-1">Variables compartidas</h4>
+
+<pre data-role="codeBlock" data-info="java" class="language-java">libre<span class="token operator">=</span><span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> siguiente<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span>
+</pre><table>
+<tbody><tr><td>Personas</td><td>Cordinador</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Persona</span><span class="token punctuation">[</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token punctuation">]</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token operator">&lt;</span><span class="token class-name">Agregar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>await <span class="token punctuation">(</span>siguiente<span class="token operator">==</span>id<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+  <span class="token operator">&lt;</span>await libre<span class="token punctuation">;</span> 
+     libre <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> 
+     <span class="token class-name">Imprimir</span><span class="token punctuation">(</span>documento<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+     libre <span class="token operator">=</span> <span class="token boolean">true</span>
+   <span class="token operator">&gt;</span>
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Coordinador</span><span class="token operator">::</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> sig
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token operator">&lt;</span>await <span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token punctuation">;</span> sig<span class="token operator">=</span><span class="token class-name">Sacar</span><span class="token punctuation">(</span><span class="token class-name">C</span><span class="token punctuation">)</span><span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>await libre<span class="token punctuation">;</span> 
+      libre<span class="token operator">=</span><span class="token boolean">false</span><span class="token operator">&gt;</span>
+    siguiente<span class="token operator">=</span>sig
+    <span class="token operator">&lt;</span>libre<span class="token operator">=</span><span class="token boolean">true</span><span class="token operator">&gt;</span>
+    <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
+<p><strong>Inicialización</strong>: <code>libre</code> es <code>true</code> y <code>siguiente</code> es <code>-1</code>.</p>
+<p><em>Personas</em></p>
+<ul>
+<li><strong>Cuando una Persona llega</strong>: Añade su <code>id</code> a la cola <code>C</code>.</li>
+<li><strong>Esperando para imprimir</strong>: Cada Persona espera hasta que su <code>id</code> sea igual a <code>siguiente</code>.</li>
+<li><strong>Imprimiendo</strong>: Una vez que <code>siguiente</code> es igual al <code>id</code> de la Persona y <strong>libre = true</strong>, la Persona imprime su documento.</li>
+</ul>
+<p><em>Coordinador</em></p>
+<ul>
+<li><strong>Elegir siguiente Persona</strong>:
+<ul>
+<li>El Coordinador espera hasta que la cola <code>C</code> no esté vacía y la impresora esté libre.</li>
+<li>Saca el <code>id</code> del frente de la cola y lo asigna a <code>siguiente</code>.</li>
+</ul>
+</li>
+</ul>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-6">Ejercicio 6</h4>
 
-<p>Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos (suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan<br>
-en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
+<p>Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos (suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
 <h5 class="mume-header" id="variable-compartida">Variable compartida</h5>
 
 <pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> turno <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
@@ -240,16 +449,28 @@ en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
   <span class="token punctuation">}</span> 
 <span class="token punctuation">}</span>
 </pre></td><td>
-<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token constant">SC2</span><span class="token operator">::</span>  
-<span class="token punctuation">{</span> <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> 
-      <span class="token punctuation">{</span>   <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>turno <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> skip<span class="token punctuation">;</span>  
-           <span class="token constant">SC</span><span class="token punctuation">;</span> 
-           turno <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
-           <span class="token constant">SNC</span><span class="token punctuation">;</span> 
-       <span class="token punctuation">}</span> 
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token constant">SC2</span><span class="token operator">::</span><span class="token punctuation">{</span> 
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>turno <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> skip<span class="token punctuation">;</span>
+      <span class="token constant">SC</span><span class="token punctuation">;</span> 
+      turno <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+      <span class="token constant">SNC</span><span class="token punctuation">;</span> 
+  <span class="token punctuation">}</span> 
 <span class="token punctuation">}</span>
 </pre></td></tr>
 </tbody></table>
+<h4 class="mume-header" id="1-exclusi%C3%B3n-mutua-%EF%B8%8F">1. Exclusión Mutua ✔️</h4>
+
+<p>En este código, la variable compartida <code>turno</code> se utiliza para garantizar que solo un proceso puede estar en su sección crítica (<code>SC</code>) en un momento dado. Si <code>turno</code> es <code>1</code>, entonces <code>P1</code> puede entrar en su <code>SC</code>, y <code>P2</code> no puede (y viceversa). Así que esta condición se cumple.</p>
+<h4 class="mume-header" id="2-ausencia-de-deadlock-o-livelock%EF%B8%8F">2. Ausencia de Deadlock (o Livelock)✔️</h4>
+
+<p>No hay deadlock en este diseño, ya que siempre hay un <code>turno</code> específico en el que uno de los procesos puede entrar en su <code>SC</code>. En el peor de los casos, tendrían que esperar a que el otro proceso termine su <code>SC</code> para entrar en la suya. Por lo tanto, esta condición también se cumple.</p>
+<h4 class="mume-header" id="3-ausencia-de-demora-innecesaria-">3. Ausencia de Demora Innecesaria ❌</h4>
+
+<p>La ausencia de demora innecesaria podría no cumplirse completamente. Imagina un escenario en el que el proceso P1 entra y sale de su SC muy rápidamente en comparación con P2. P2 tendría que esperar a que P1 complete su SC y cambie el turno, incluso si P1 pudiera funcionar eficazmente en su sección no crítica. Esto podría considerarse una demora “innecesaria” para P2.</p>
+<h4 class="mume-header" id="4-eventual-entrada-%EF%B8%8F">4. Eventual Entrada ✔️</h4>
+
+<p>El diseño asegura que si un proceso intenta entrar en su <code>SC</code>, eventualmente podrá hacerlo. Esto se debe a que el “turno” cambia después de que un proceso sale de su <code>SC</code>, permitiendo al otro proceso entrar en su <code>SC</code>. Entonces, esta condición también se cumple.</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h4 class="mume-header" id="ejercicio-7">Ejercicio 7</h4>
 
@@ -258,57 +479,129 @@ en algún momento), indicar si cumple con las 4 condiciones requeridas</p>
 <blockquote>
 <p>Nota: puede basarse en la solución para implementar barreras con “Flags y coordinador” vista en la teoría 3.</p>
 </blockquote>
+<h5 class="mume-header" id="variables-compartidas-2">Variables compartidas</h5>
+
+<pre data-role="codeBlock" data-info="java" class="language-java">bool libre<span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> arribo<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+</pre><table><tbody><tr><td>Procesos</td><td>Cordinador</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Proceso</span><span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token punctuation">]</span><span class="token operator">::</span> <span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    arribo<span class="token punctuation">[</span>id<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>arribo<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> skip <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token class-name">SC</span>
+    libre<span class="token operator">=</span><span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token constant">SNC</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Coordinador</span><span class="token operator">::</span> <span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">[</span>i<span class="token operator">=</span><span class="token number">1</span> <span class="token keyword keyword-to">to</span> <span class="token namespace">n</span> st arribo<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">==</span><span class="token boolean">true</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+      <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>not libre<span class="token punctuation">)</span> skip<span class="token punctuation">;</span>
+      libre<span class="token operator">=</span><span class="token boolean">false</span><span class="token punctuation">;</span>
+      arribo<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td></tr></tbody></table>
+<h4 class="mume-header" id="procesos">Procesos</h4>
+
+<ul>
+<li>Cada proceso avisa que quiere entrar a su sección crítica (<code>SC</code>) poniendo <code>arribo[id] = true</code>.</li>
+<li>Espera hasta que el coordinador ponga <code>arribo[id] = false</code>.</li>
+<li>Después de ejecutar su <code>SC</code>, pone <code>libre = true</code>.</li>
+</ul>
+<h4 class="mume-header" id="coordinador">Coordinador</h4>
+
+<ul>
+<li>Busca procesos que hayan llegado (<code>arribo[i] == true</code>).</li>
+<li>Espera a que el recurso esté <code>libre</code>.</li>
+<li>Pone <code>libre = false</code> y <code>arribo[i] = false</code> para permitir al proceso entrar a su <code>SC</code>.</li>
+</ul>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Simple de entender.</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>Se podrían generar condiciones de carrera porque no hay mecanismos de exclusión mutua reales para proteger la variable <code>libre</code> y el arreglo <code>arribo</code>.</li>
+</ul>
+<h3 class="mume-header" id="otra-soluci%C3%B3n">Otra solución</h3>
+
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token keyword keyword-int">int</span> next<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-int">int</span> arribo<span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token punctuation">]</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+</pre><table>
+<tbody><tr><td>Procesos</td><td>Cordinador</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Proceso</span><span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token punctuation">]</span><span class="token operator">::</span> <span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    arribo<span class="token punctuation">[</span>id<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>id <span class="token operator">!=</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span> skip <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token class-name">SC</span>
+    next <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token constant">SNC</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td><td>
+<pre data-role="codeBlock" data-info="java" class="language-java"><span class="token class-name">Process</span> <span class="token class-name">Coordinador</span><span class="token operator">::</span> <span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">[</span>i<span class="token operator">=</span><span class="token number">1</span> <span class="token keyword keyword-to">to</span> <span class="token namespace">n</span> st arribo<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">==</span><span class="token boolean">true</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+      <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>next<span class="token operator">!=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> skip<span class="token punctuation">;</span>
+      arribo<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+      next <span class="token operator">=</span> i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td></tr>
+</tbody></table>
+<h4 class="mume-header" id="procesos-1">Procesos</h4>
+
+<ul>
+<li>Cada proceso avisa que quiere entrar a su <code>SC</code> poniendo <code>arribo[id] = true</code>.</li>
+<li>Espera hasta que <code>next = id</code>.</li>
+<li>Después de su <code>SC</code>, pone <code>next = -1</code>.</li>
+</ul>
+<h4 class="mume-header" id="coordinador-1">Coordinador</h4>
+
+<ul>
+<li>Busca procesos que hayan llegado (<code>arribo[i] == true</code>).</li>
+<li>Espera hasta que <code>next = -1</code>.</li>
+<li>Pone <code>arribo[i] = false</code> y <code>next = i</code>.</li>
+</ul>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Más estructurada que la primera.</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>Al igual que la primera solución, podría tener condiciones de carrera.</li>
+</ul>
+<blockquote>
+<p>Ambas soluciones intentan ofrecer una implementación de grano fino pero no garantizan la exclusión mutua en el acceso a las variables compartidas, lo que podría llevar a condiciones de carrera. Podrían funcionar en un ambiente ideal donde estas condiciones de carrera no ocurran, pero no son soluciones robustas para todos los escenarios posibles.</p>
+</blockquote>
 
       </div>
       <div class="md-sidebar-toc">
 <div class="md-toc">
-<div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#ejercicio-1" class="md-toc-link">
-            <p>Ejercicio 1</p>
-
-          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#ejercicio-2" class="md-toc-link">
-            <p>Ejercicio 2</p>
-
-          </a></div><details style="padding:0;;padding-left:0px;" open="">
+<details style="padding:0;;padding-left:0px;" open="">
         <summary class="md-toc-link-wrapper">
-          <a href="#ejercicio-3" class="md-toc-link"><p>Ejercicio 3</p>
+          <a href="#otra-solución" class="md-toc-link"><p>Otra solución</p>
 </a>
           </summary>
         <div>
           <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#variables-compartidas" class="md-toc-link">
-            <p>Variables compartidas</p>
+          <a href="#procesos-1" class="md-toc-link">
+            <p>Procesos</p>
+
+          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
+          <a href="#coordinador-1" class="md-toc-link">
+            <p>Coordinador</p>
 
           </a></div>
         </div>
       </details>
-    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#ejercicio-4" class="md-toc-link">
-            <p>Ejercicio 4</p>
-
-          </a></div><div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#ejercicio-5" class="md-toc-link">
-            <p>Ejercicio 5</p>
-
-          </a></div><details style="padding:0;;padding-left:0px;" open="">
-        <summary class="md-toc-link-wrapper">
-          <a href="#ejercicio-6" class="md-toc-link"><p>Ejercicio 6</p>
-</a>
-          </summary>
-        <div>
-          <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:42px">
-          <a href="#variable-compartida" class="md-toc-link">
-            <p>Variable compartida</p>
-
-          </a></div>
-        </div>
-      </details>
-    <div class="md-toc-link-wrapper" style="padding:0;;display:list-item;list-style:square;margin-left:18px">
-          <a href="#ejercicio-7" class="md-toc-link">
-            <p>Ejercicio 7</p>
-
-          </a></div>
+    
 </div>
 </div>
       <a id="sidebar-toc-btn">≡</a>
