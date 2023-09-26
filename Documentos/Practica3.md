@@ -261,26 +261,26 @@ Modifique la solución de (b) para el caso en que se deba dar prioridad de acuer
 
 ```c
 Monitor Fotocopiadora{
-    cond espera;
+    ColaPrioridad cola;
     int cant = 0;
-    int cantEsperan = 0;
+    cond espera[N];
 
-    Procedure fotocopiar(){
+    procerdure fotocopiar(int u, int edad){
         if(cant == 1 ){
-            cantEsperan++;
-            wait(espera);
+            cola.encolarOrdenado(u, edad);
+            wait(espera[u]);
         }
         else{
             cant++;
         }
     }
-    Procedure terminarFotocopiar(){
-        if (cantEsperan > 0){
-            cantEsperan--;
-            signal(espera);
+    procerdure terminarFotocopiar(){
+        if (cola.vacia()){
+            cant--;
         }
         else{
-            cant--;
+            int u = cola.desencolar();
+            signal(espera[u]);
         }
     }
 }
@@ -291,7 +291,8 @@ Monitor Fotocopiadora{
 
 ```c
 Process Persona [u:1..N-1]{
-    Fotocopiadora.fotocopiar();
+    edad = Persona.edad();
+    Fotocopiadora.fotocopiar(u, edad);
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
 }
@@ -308,11 +309,32 @@ Modifique la solución de (a) para el caso en que se deba respetar estrictamente
 <tr><td>
 
 ```c
+Monitor Fotocopiadora{
+    cond espera;
+    int siguiente = 1;
 
+    Procedure fotocopiar(int u){
+        while(u != siguiente ){
+            wait(espera);
+        }
+        siguiente++;
+    }
+
+    Procedure terminarFotocopiar(){
+        signal(espera);
+    }
+    
+
+}
 ```
 </td><td>
 
 ```c
+Process Persona [u:1..N-1]{
+    Fotocopiadora.fotocopiar(u);
+    //Fotocopiar
+    Fotocopiadora.terminarFotocopiar();
+}
 
 ```
 </td></tr></table>
