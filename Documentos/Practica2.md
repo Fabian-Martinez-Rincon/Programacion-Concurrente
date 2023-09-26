@@ -122,7 +122,7 @@ Process Abuela{
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
-### Ejercicio 1
+### ✅ Ejercicio 1
 
 Existen N personas que deben ser chequeadas por un detector de metales antes de poder ingresar al avión.
 
@@ -160,7 +160,7 @@ Process Persona[id:1..N]{
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-### Ejercicio 2
+### Ejercicio 2 (Falta)
 
 Un sistema de control cuenta con 4 procesos que realizan chequeos en forma colaborativa. Para ello, reciben el historial de fallos del día anterior (por simplicidad, de tamaño N). De cada fallo, se conoce su número de identificación (ID) y su nivel de gravedad (0=bajo, 1=intermedio, 2=alto, 3=crítico). Resuelva considerando las siguientes situaciones:
 
@@ -185,7 +185,7 @@ Un sistema de control cuenta con 4 procesos que realizan chequeos en forma colab
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-### Ejercicio 3
+### ✅ Ejercicio 3
 
 Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola.
 
@@ -212,7 +212,7 @@ Process Proceso[id:1..P]{
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-### Ejercicio 4
+### ✅ Ejercicio 4
 
 Suponga que existe una BD que puede ser accedida por 6 usuarios como máximo al mismo tiempo. Además, los usuarios se clasifican como usuarios de prioridad alta y usuarios de prioridad baja. Por último, la BD tiene la siguiente restricción:
 - no puede haber más de 4 usuarios con prioridad alta al mismo tiempo usando la BD.
@@ -254,17 +254,14 @@ Process Usuario-Baja [I:1..K]::{
 
 </table>
 
-No, no es la mas adecuada. P(alta) y P(baja) deberian ir antes de P(sem), ya que evita demora innecesaria al preguntar si hay primero espacio para gente de alta/baja antes de reservar el espacio para entrar. Lo mismo ocurre con V(alta) y V(baja), deberian ir antes de V(sem) ya que causo demora innecesaria si libero un usuario antes de liberar alta o baja
+No, no es la mas adecuada. P(alta) y P(baja) deberian ir antes de P(sem), ya que evita demora innecesaria al preguntar si hay primero espacio para gente de alta/baja antes de reservar el espacio para entrar. 
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-### Ejercicio 5
+### ✅ Ejercicio 5
 
 En una empresa de logística de paquetes existe una sala de contenedores donde se preparan las entregas. Cada contenedor puede almacenar un paquete y la sala cuenta con capacidad para N contenedores. Resuelva considerando las siguientes situaciones:
-
-
-
 
 ---
 
@@ -427,7 +424,7 @@ Process Entregador[id:0..E-1]{
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20999px">
 
 
-### Ejercicio 6
+### ✅ Ejercicio 6
 
 Existen N personas que deben imprimir un trabajo cada una. Resolver cada ítem usando
 semáforos:
@@ -531,8 +528,8 @@ Process Coordinador{
         P(mutex);
             pop(c,aux);
         V(mutex);
-        P(termine)
-        V(espera[aux]);
+        P(termine) //Esta y la de abajo, podrian invertise
+        V(espera[aux]); //Si el semaforo estuviera en 0
     }
 }
 ```
@@ -558,29 +555,33 @@ Process Persona[id:0..P-1]{
     
     V(coord)
     P(espera[id])
+    //Imprimir en impresora
+    asignado[aux];
     P(impMutex)
-        pop(impresoras,imp)
-        V(impMutex)
-            Imprimir(documento,imp)
-        P(impMutex)
         push(impresoras,imp)
     V(impMutex)
-    V(termine)
+    V(imp)
 }
 ```
 </td><td>
 
 ```c
 int aux;
+imp,sem = 5
+libres : cola
 Process Coordinador{
-while(true){
-    P(coord);
-    P(mutex);
-        pop(c,aux);
-    V(mutex);
-    P(termine)
-    V(espera[aux]);
-}
+    while(true){
+        P(coord);
+        P(mutex);
+            pop(c,aux);
+        V(mutex);
+        P(imp)
+        P(impMutex)
+            impLibre = pop(libres)
+        V(impMutex)
+        asignado[aux]=impLibre
+        V(espera[aux]);
+    }
 }
 ```
 </td> </table>
@@ -590,7 +591,7 @@ while(true){
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' >
 
 
-### Ejercicio 7
+### ✅ Ejercicio 7 (Corregido a duras penas)
 
 Suponga que se tiene un curso con 50 alumnos. Cada alumno debe realizar una tarea y existen 10 enunciados posibles. Una vez que todos los alumnos eligieron su tarea, comienzan a realizarla. Cada vez que un alumno termina su tarea, le avisa al profesor y se queda esperando el puntaje del grupo, el cual está dado por todos aquellos que comparten el mismo enunciado. Cuando un grupo terminó, el profesor les otorga un puntaje que representa el orden en que se terminó esa tarea de las 10 posibles.
 
@@ -692,7 +693,7 @@ Process Empleado[id:0..E-1]{
             P(mutex)
         }
     V(mutex);
-    if (ultimo){
+    if (ultimo){ //*
         dar(premio,max(piezas).pos) -- max devuelve pos y cantidad
         for i = 0 to E-1{ -- Sino el premiado puede ya haber finalizado
         V(salida)
@@ -701,6 +702,18 @@ Process Empleado[id:0..E-1]{
     P(salida)
 }
 ```
+
+
+
+#### Comentario del profesor
+
+> No garantizo que es el ultimo. Ya que puedo estar en T = 0 y otro proceso puede entrar y hacer T = 0 y no ser el ultimo.
+
+> `*` Puede estar calculando el maximo antes que algun proceso haya actualizado piezas[]
+
+Tampoco hace falta hacer un for para calcular el maximo, tranquilamente podemos hacer
+
+ganador = calcularMaximo();
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 

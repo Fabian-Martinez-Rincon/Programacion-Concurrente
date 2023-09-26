@@ -10,7 +10,7 @@
 - [Ejercicio 4](#ejercicio-4)
 - [Ejercicio 5](#ejercicio-5)
 - [Ejercicio 6](#ejercicio-6)
-- [Ejercicio 7](#ejercicio-7)
+- [Ejercicio 7](#ejercicio-7)1
 
 ---
 
@@ -201,11 +201,12 @@ Realice una solución concurrente de grano grueso (utilizando <> y/o <await B; S
 5     int parte = M / P;
 6     int extra = 0;
 7     int inicio = id * parte;
-  
+      // Esta Parte no hacia falta ya que el profe, nos dijo que con un 
+      // Comentario generico lo podemos hacer andar
 8     if (id == P-1) {
 9         extra = M mod P;
 10    }
-
+      
 11    for (i = inicio; i < inicio + parte + extra; i++) {
 12        if (arr[i] == N) {
 13            suma++;
@@ -394,11 +395,13 @@ a) Implemente una solución suponiendo que existe una única impresora compartid
 bool libre = true;
 Process Persona[id: 0..N-1] {
   while(true) {
-    <await libre; 
+    <
+      await libre; 
       libre = false; 
-      Imprimir(documento); 
-      libre = true
     >
+    Imprimir(documento); 
+    libre = true
+    
   }
 }
 ```
@@ -424,11 +427,7 @@ Process Persona[id:0..P-1]::{
   else 
     Agregar(C,id)>;
   <await (sig==id)>;
-  <await libre; 
-    libre = false;
-    Imprimir(documento);
-    libre = true
-  >
+  Imprimir(documento);
   <if(empty(C) 
      sig=-1;
   else 
@@ -460,11 +459,7 @@ Process Persona[id:0..P-1]::{
   else 
     AgregarOrdenado(C,id)>; //A chequear
   <await (sig==id)>;
-  <await libre; 
-    libre = false; 
-    Imprimir(documento); 
-    libre = true
-  >
+  Imprimir(documento); 
   <if(empty(C) 
     sig=-1;
   else 
@@ -483,7 +478,7 @@ d) Modifique la solución de (b) para el caso en que además hay un proceso Coor
 #### Variables compartidas
 
 ```java
-libre=true;
+fin=false;
 int siguiente=-1
 ```
 
@@ -495,11 +490,8 @@ int siguiente=-1
 Process Persona[1..N]::{
   <Agregar(C,id);>
   <await (siguiente==id)>;
-  <await libre; 
-     libre = false; 
-     Imprimir(documento); 
-     libre = true
-   >
+  Imprimir(documento); 
+  fin = true
 }
 ```
 </td><td>
@@ -509,10 +501,7 @@ Process Coordinador::{
   int sig
   while(true){
     <await !empty(C); sig=Sacar(C)>
-    <await libre; 
-      libre=false>
-    siguiente=sig
-    <libre=true>
+    <await fin;fin=false>
     }
  }
 ```

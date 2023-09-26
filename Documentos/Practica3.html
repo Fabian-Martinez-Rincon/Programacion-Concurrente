@@ -1,0 +1,320 @@
+<!DOCTYPE html><html><head>
+      <title>Practica3</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      pre{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;padding:1em;margin:.5em 0;overflow:auto;line-height:1.5;tab-size:4;hyphens:none;color:#f8f8f2;background-color:#323232!important;border:#515151;border-radius:3px}pre[class*=language-]{padding:1em}code[class*=language-] .token.cdata,code[class*=language-] .token.comment,code[class*=language-] .token.doctype,code[class*=language-] .token.prolog,pre[class*=language-] .token.cdata,pre[class*=language-] .token.comment,pre[class*=language-] .token.doctype,pre[class*=language-] .token.prolog{color:#75715e}code[class*=language-] .token.punctuation,pre[class*=language-] .token.punctuation{color:inherit}code[class*=language-] .namespace,pre[class*=language-] .namespace{opacity:.7}code[class*=language-] .token.boolean,code[class*=language-] .token.constant,code[class*=language-] .token.deleted,code[class*=language-] .token.function-name,code[class*=language-] .token.number,code[class*=language-] .token.property,code[class*=language-] .token.symbol,code[class*=language-] .token.tag,pre[class*=language-] .token.boolean,pre[class*=language-] .token.constant,pre[class*=language-] .token.deleted,pre[class*=language-] .token.function-name,pre[class*=language-] .token.number,pre[class*=language-] .token.property,pre[class*=language-] .token.symbol,pre[class*=language-] .token.tag{color:#ae81ff}code[class*=language-] .token.attr-name,code[class*=language-] .token.builtin,code[class*=language-] .token.char,code[class*=language-] .token.inserted,code[class*=language-] .token.selector,code[class*=language-] .token.string,pre[class*=language-] .token.attr-name,pre[class*=language-] .token.builtin,pre[class*=language-] .token.char,pre[class*=language-] .token.inserted,pre[class*=language-] .token.selector,pre[class*=language-] .token.string{color:#e6db74}code[class*=language-] .token.entity,pre[class*=language-] .token.entity{color:#ae81ff}code[class*=language-] .token.url,pre[class*=language-] .token.url{color:#ccc}code[class*=language-] .token.operator,pre[class*=language-] .token.operator{color:#f92672}code[class*=language-] .token.atrule,code[class*=language-] .token.attr-value,code[class*=language-] .token.keyword,pre[class*=language-] .token.atrule,pre[class*=language-] .token.attr-value,pre[class*=language-] .token.keyword{color:#66d9ef}code[class*=language-] .token.function,pre[class*=language-] .token.function{color:#a6e22e}code[class*=language-] .token.class-name,pre[class*=language-] .token.class-name{color:#a6e22e}code[class*=language-] .token.regex,pre[class*=language-] .token.regex{color:#ae81ff}code[class*=language-] .token.important,code[class*=language-] .token.variable,pre[class*=language-] .token.important,pre[class*=language-] .token.variable{color:#a6e22e}code[class*=language-] .token.bold,code[class*=language-] .token.important,pre[class*=language-] .token.bold,pre[class*=language-] .token.important{font-weight:700}code[class*=language-] .token.italic,pre[class*=language-] .token.italic{font-style:italic}code[class*=language-] .token.entity,pre[class*=language-] .token.entity{cursor:help}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#f8f8f2;background-color:#282828;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#fff}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#dbdbbd}html body strong{color:#fff}html body del{color:#dbdbbd}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#dbdbbd;background-color:#3c3c3c;border-left:4px solid #515151}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#515151;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#fff}html body table td,html body table th{border:1px solid #515151;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#fff;background-color:#3c3c3c;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#515151;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#fff;border:1px solid #515151;border-bottom:2px solid #424242;padding:2px 4px;background-color:#3c3c3c;border-radius:3px}@media print{html body{background-color:#282828}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#fff;page-break-after:avoid}html body blockquote{color:#dbdbbd}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px/2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      <div align="center"> <h1> Practica 3 Monitores </h1></div>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<ul>
+<li><a href="https://github.com/Fabian-Martinez-Rincon/Programacion-Concurrente">Github con el resto de practicas</a></li>
+<li><a href="#ejercicio-1">Ejercicio 1</a></li>
+<li><a href="#ejercicio-2">Ejercicio 2</a></li>
+<li><a href="#ejercicio-3">Ejercicio 3</a></li>
+<li><a href="#ejercicio-4">Ejercicio 4</a></li>
+<li><a href="#ejercicio-5">Ejercicio 5</a></li>
+<li><a href="#ejercicio-6">Ejercicio 6</a></li>
+<li><a href="#ejercicio-7">Ejercicio 7</a></li>
+<li><a href="#ejercicio-7">Ejercicio 7</a></li>
+</ul>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<p><strong>CONSIDERACIONES PARA RESOLVER LOS EJERCICIOS:</strong></p>
+<ul>
+<li>Los monitores utilizan el protocolo signal and continue.</li>
+<li>A una variable condition SÓLO pueden aplicársele las operaciones SIGNAL, SIGNALALL y WAIT.</li>
+<li>NO puede utilizarse el wait con prioridades.</li>
+<li>NO se puede utilizar ninguna operación que determine la cantidad de procesos encolados en una variable condition o si está vacía.</li>
+<li>La única forma de comunicar datos entre monitores o entre un proceso y un monitor es por medio de invocaciones al procedimiento del monitor del cual se quieren obtener (o enviar) los datos.</li>
+<li>No existen variables globales.</li>
+<li>En todos los ejercicios debe maximizarse la concurrencia.</li>
+<li>En todos los ejercicios debe aprovecharse al máximo la característica de exclusión mutua que brindan los monitores.</li>
+<li>Debe evitarse hacer busy waiting.</li>
+<li>En todos los ejercicios el tiempo debe representarse con la función delay.</li>
+</ul>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-1">Ejercicio 1</h3>
+
+<p>Se dispone de un puente por el cual puede pasar un solo auto a la vez. Un auto pide permiso para pasar por el puente, cruza por el mismo y luego sigue su camino.</p>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Puente
+    cond cola<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cant<span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    Procedure <span class="token function">entrarPuente</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span> cant <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> 
+            <span class="token function">wait</span> <span class="token punctuation">(</span>cola<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cant <span class="token operator">=</span> cant <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    end<span class="token punctuation">;</span>
+    Procedure <span class="token function">salirPuente</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+        cant <span class="token operator">=</span> cant – <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>cola<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    end<span class="token punctuation">;</span>
+End Monitor<span class="token punctuation">;</span>
+
+Process Auto <span class="token punctuation">[</span>a<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>M<span class="token punctuation">]</span>
+    Puente<span class="token punctuation">.</span> <span class="token function">entrarPuente</span> <span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//el auto cruza el puente</span>
+    Puente<span class="token punctuation">.</span> <span class="token function">salirPuente</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+End Process<span class="token punctuation">;</span>
+</code></pre><h4 class="crossnote-header" id="parte-a">Parte a</h4>
+
+<p><strong>¿El código funciona correctamente? Justifique su respuesta.</strong></p>
+<p><strong>RTA</strong> El ejercicio parece estar bien, el primero al tener cant = 0, no entra en el puente e incrementa la cantidad de <code>cant</code> en uno. Despues de el primer coche, todos los demas se encolan y se duermen en el <code>wait</code>. Al momento de salir un auto, se hace <code>signal</code> y se despierta al siguiente auto en la cola.</p>
+<h4 class="crossnote-header" id="parte-b">Parte b</h4>
+
+<p>¿Se podría simplificar el programa? ¿Sin monitor? ¿Menos procedimientos? ¿Sin variable condition? En caso afirmativo, rescriba el código.</p>
+<p><strong>RTA</strong> Se podria simplificar a un solo procedimiento cruzar que cruce el puente. No es necesario la variable condition (<code>cant</code>)</p>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Puente<span class="token punctuation">{</span>
+    Procedure <span class="token function">cruzarPuente</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token function">CruzoPuente</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Process Auto <span class="token punctuation">[</span>a<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>M<span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Puente<span class="token punctuation">.</span><span class="token function">cruzarPuente</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//Hace falta pasar el id por pasametro?</span>
+<span class="token punctuation">}</span>
+</code></pre><blockquote>
+<p>Queria preguntar si hace falta hacer el codigo por cada pregunta</p>
+</blockquote>
+<h4 class="crossnote-header" id="parte-c">Parte c</h4>
+
+<p>¿La solución original respeta el orden de llegada de los vehículos?</p>
+<p>No 😄</p>
+<p>Si rescribió el código en el punto <code>b)</code><br>
+<strong>¿esa solución respeta el orden de llegada?</strong></p>
+<p>No 😄</p>
+<blockquote>
+<p>Como corno hago para que sea por orden de llegada 😦</p>
+</blockquote>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-2">Ejercicio 2</h3>
+
+<p>Existen N procesos que deben leer información de una base de datos, la cual es administrada por un motor que admite una cantidad limitada de consultas simultáneas.</p>
+<hr>
+<h4 class="crossnote-header" id="parte-a-1">Parte a)</h4>
+
+<p>Analice el problema y defina qué procesos, recursos y monitores serán necesarios/convenientes, además de las posibles sincronizaciones requeridas para resolver el problema.</p>
+<p>El código presentado es una solución al problema de acceso concurrente a una base de datos que admite un número limitado de consultas simultáneas.</p>
+<p>La solución utiliza un monitor llamado <code>BaseDeDatos</code> que tiene una variable de condición <code>espera</code> y una variable entera <code>cant</code> que representa la cantidad de consultas en curso. El monitor tiene dos procedimientos: <code>leer()</code> y <code>terminarLectura()</code>.</p>
+<p>El procedimiento <code>leer()</code> utiliza un bucle <code>while</code> para esperar hasta que haya menos de 5 consultas en curso. Cuando se cumple esta condición, se incrementa la variable <code>cant</code>.</p>
+<p>El procedimiento <code>terminarLectura()</code> decrementa la variable <code>cant</code> y señala la variable de condición <code>espera</code>, lo que permite que otro proceso pueda leer de la base de datos.</p>
+<p>El proceso <code>Usuario</code> utiliza los procedimientos <code>leer()</code> y <code>terminarLectura()</code> del monitor <code>BaseDeDatos</code> para acceder a la base de datos.</p>
+<p>En resumen, esta solución utiliza un monitor para controlar el acceso concurrente a la base de datos y garantizar que no haya más de 5 consultas simultáneas.</p>
+<h4 class="crossnote-header" id="parte-b-1">Parte b)</h4>
+
+<p>Implemente el acceso a la base por parte de los procesos, sabiendo que el motor de base de datos puede atender a lo sumo 5 consultas de lectura simultáneas.</p>
+<table><tbody><tr><td>Base de Datos</td><td>Usuarios(Que piden consultas)</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor BaseDeDatos<span class="token punctuation">{</span>
+    cond espera<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    Procedure <span class="token function">leer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span>cant <span class="token operator">==</span> <span class="token number">5</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        cant<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">terminarLectura</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cant<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Usuario <span class="token punctuation">[</span>u<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token punctuation">]</span><span class="token punctuation">{</span>
+    BaseDeDatos<span class="token punctuation">.</span><span class="token function">leer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//Leer</span>
+    BaseDeDatos<span class="token punctuation">.</span><span class="token function">terminarLectura</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr></tbody></table>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-3">Ejercicio 3</h3>
+
+<p>Existen N personas que deben fotocopiar un documento. La fotocopiadora sólo puede ser usada por una persona a la vez. Analice el problema y defina qué procesos, recursos y monitores serán necesarios/convenientes, además de las posibles sincronizaciones requeridas para resolver el problema. Luego, resuelva considerando las siguientes situaciones:</p>
+<hr>
+<h4 class="crossnote-header" id="parte-a-2">Parte a)</h4>
+
+<p>Implemente una solución suponiendo no importa el orden de uso. Existe una función Fotocopiar() que simula el uso de la fotocopiadora.</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
+    cond espera<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span>cant <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        cant<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cant<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>u<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//Fotocopiar</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr></tbody></table>
+<hr>
+<h4 class="crossnote-header" id="parte-b-2">Parte b)</h4>
+
+<p>Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
+    cond espera<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cantEsperan <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cant <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+            cantEsperan<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+            cant<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>cantEsperan <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            cantEsperan<span class="token operator">--</span><span class="token punctuation">;</span>
+            <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+            cant<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>u<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//Fotocopiar</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><blockquote>
+<p>Usamos cant para representar la cantidad de personas que estan usando la fotocopiadora y cantEsperan para representar la cantidad de personas que estan esperando para usar la fotocopiadora</p>
+</blockquote>
+</td></tr></tbody></table>
+<hr>
+<h4 class="crossnote-header" id="parte-c-1">Parte c)</h4>
+
+<p>Modifique la solución de (b) para el caso en que se deba dar prioridad de acuerdo con la edad de cada persona (cuando la fotocopiadora está libre la debe usar la persona de mayor edad entre las que estén esperando para usarla).</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
+    cond espera<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> cantEsperan <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cant <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+            cantEsperan<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+            cant<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>cantEsperan <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            cantEsperan<span class="token operator">--</span><span class="token punctuation">;</span>
+            <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+            cant<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>u<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//Fotocopiar</span>
+    Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr></tbody></table>
+<hr>
+<h4 class="crossnote-header" id="parte-d">Parte d)</h4>
+
+<p>Modifique la solución de (a) para el caso en que se deba respetar estrictamente el orden dado por el identificador del proceso (la persona X no puede usar la fotocopiadora hasta que no haya terminado de usarla la persona X-1).</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td></tr></tbody></table>
+<hr>
+<h4 class="crossnote-header" id="parte-e">Parte e)</h4>
+
+<p>Modifique la solución de (b) para el caso en que además haya un Empleado que le indica a cada persona cuando debe usar la fotocopiadora.</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td></tr></tbody></table>
+<hr>
+<h4 class="crossnote-header" id="parte-f">Parte f)</h4>
+
+<p>Modificar la solución (e) para el caso en que sean 10 fotocopiadoras. El empleado le indica a la persona cuál fotocopiadora usar y cuándo hacerlo.</p>
+<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td></tr></tbody></table>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-4">Ejercicio 4</h3>
+
+<p>Existen N vehículos que deben pasar por un puente de acuerdo con el orden de llegada.<br>
+Considere que el puente no soporta más de 50000kg y que cada vehículo cuenta con su propio peso (ningún vehículo supera el peso soportado por el puente).</p>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-5">Ejercicio 5</h3>
+
+<p>En un corralón de materiales se deben atender a N clientes de acuerdo con el orden de llegada.</p>
+<p>Cuando un cliente es llamado para ser atendido, entrega una lista con los productos que comprará, y espera a que alguno de los empleados le entregue el comprobante de la compra realizada.</p>
+<h4 class="crossnote-header" id="parte-a-3">Parte a)</h4>
+
+<p>Resuelva considerando que el corralón tiene un único empleado.</p>
+<h4 class="crossnote-header" id="parte-b-3">Parte b)</h4>
+
+<p>Resuelva considerando que el corralón tiene E empleados (E &gt; 1).</p>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-6">Ejercicio 6</h3>
+
+<p>Existe una comisión de 50 alumnos que deben realizar tareas de a pares, las cuales son corregidas por un JTP. Cuando los alumnos llegan, forman una fila. Una vez que están todos en fila, el JTP les asigna un número de grupo a cada uno. Para ello, suponga que existe una función AsignarNroGrupo() que retorna un número “aleatorio” del 1 al 25. Cuando un alumno ha recibido su número de grupo, comienza a realizar su tarea. Al terminarla, el alumno le avisa al JTP y espera por su nota. Cuando los dos alumnos del grupo completaron la tarea, el JTP les asigna un puntaje (el primer grupo en terminar tendrá como nota 25, el segundo 24, y así sucesivamente hasta el último que tendrá nota 1). Nota: el JTP no guarda el número de grupo que le asigna a cada alumno.</p>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-7">Ejercicio 7</h3>
+
+<p>En un entrenamiento de fútbol hay 20 jugadores que forman 4 equipos (cada jugador conoce el equipo al cual pertenece llamando a la función DarEquipo()). Cuando un equipo está listo (han llegado los 5 jugadores que lo componen), debe enfrentarse a otro equipo que también esté listo (los dos primeros equipos en juntarse juegan en la cancha 1, y los otros dos equipos juegan en la cancha 2). Una vez que el equipo conoce la cancha en la que juega, sus jugadores se dirigen a ella. Cuando los 10 jugadores del partido llegaron a la cancha comienza el partido, juegan durante 50 minutos, y al terminar todos los jugadores del partido se retiran (no es necesario que se esperen para salir).</p>
+<img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
+<h3 class="crossnote-header" id="ejercicio-8">Ejercicio 8</h3>
+
+<p>Se debe simular una maratón con C corredores donde en la llegada hay UNA máquina expendedoras de agua con capacidad para 20 botellas. Además, existe un repositor encargado de reponer las botellas de la máquina. Cuando los C corredores han llegado al inicio comienza la carrera. Cuando un corredor termina la carrera se dirigen a la máquina expendedora, espera su turno (respetando el orden de llegada), saca una botella y se retira. Si encuentra la máquina sin botellas, le avisa al repositor para que cargue nuevamente la máquina con 20 botellas; espera a que se haga la recarga; saca una botella y se retira.</p>
+<blockquote>
+<p>Nota: mientras se reponen las botellas se debe permitir que otros corredores se encolen.</p>
+</blockquote>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
