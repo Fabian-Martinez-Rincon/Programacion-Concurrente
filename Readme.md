@@ -25,18 +25,11 @@
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-### Parcial primera fecha 2022
+> La practica 1 no entra en el parcial  
 
-##### Ejercicio 1
+## Lo que rescato de la practica 1
 
-SEMÁFOROS. Existen 15 sensores de temperatura y 2 módulos centrales de procesamiento. Un sensor mide la temperatura cada cierto tiempo (función medir()), la envía al módulo central para que le indique qué acción debe hacer (un número del 1 al 10) (función determinar() para el módulo central) y la hace (función realizar()). Los módulos atienden las mediciones por orden de llegada.
-
-##### Ejercicio 2
-
-MONITORES. Una boletería vende E entradas para un partido, y hay P personas (P>E) que quieren comprar. Se las atiende por orden de llegada y la función vender() simula la venta. La boletería debe informarle a la persona que no hay más entradas disponibles o devolverle el número de entrada si pudo hacer la compra.
-
-##### Ejercicio 3
-
-MONITORES. Por un puente turístico puede pasar sólo un auto a la vez. Hay N autos que quieren pasar (función pasar()) y lo hacen por orden de llegada.
-
-
+- Mientras menos variables compartidas, menos secciones criticas voy a tener que proteger
+- Trabajar siempre con variables locales y cuando termino, volcar el resultado sobre la variable compartida.
+- Si sabes la cantidad de iteraciones que tiene que hacer un proceso, se usa un for, no un while
+- Si las variables compartidas, las modifica solo un proceso y los demas solo la leen, no hace falta < proteger esa variable >
