@@ -376,8 +376,10 @@ Process Persona [id:0..n-1]{
 
 Modifique la solución de (b) para el caso en que además haya un Empleado que le indica a cada persona cuando debe usar la fotocopiadora.
 
+<table>
+<tr><td>Monitor</td><td>Procesos</td></tr>
 
-#### Fotocopiadora
+<tr><td>
 
 ```c
 Monitor Fotocopiadora{
@@ -406,14 +408,12 @@ Monitor Fotocopiadora{
 }
 
 ```
+</td><td>
 
-
-#### Personas
+#### Persona
 
 ```c
-// El proceso deberia tener una senial para esperar que le confirma
-// El empleado o como hago esta parte?
-Process Persona [id:1..N-1]{ //id es el id de la persona
+Process Persona [id:0..n-1]{
     Fotocopiadora.fotocopiar();
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
@@ -424,11 +424,14 @@ Process Persona [id:1..N-1]{ //id es el id de la persona
 
 ```c
 Process Empleado {
-    for (i = 1 to N-1){
-        Persona[i].fotocopiar();
+    for (i = 0 to n-1){
+        Persona[i].fotocopiar()
     }
 }
 ```
+</td></tr>
+</table>
+
 
 
 
@@ -438,17 +441,67 @@ Process Empleado {
 
 Modificar la solución (e) para el caso en que sean 10 fotocopiadoras. El empleado le indica a la persona cuál fotocopiadora usar y cuándo hacerlo.
 
-<table><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<table><tr><td>Fotocopiadora</td><td>Procesos</td></tr>
 <tr><td>
 
 ```c
+Monitor Entrada{
+    Cola<int> colaFotocs
+    for i= 0 to 9{
+        push(colaFotocs,i)
+    }
 
+    Procedure llegar(out int idFotoc){
+        cantEsperando++
+        signal(hayPersonas)
+        wait(usar)
+        idFotoc= pop(colaFotocs)
+    }
+    Procedure proximo(){
+        if(cantEsperando==0){
+            wait(hayPersonas)
+        }
+        cantEsperando--
+        if(empty(colaFotocs)){
+            wait(hayFotocs)
+        }
+        signal(usar)
+    }
+    Procedure salir(in int idFotoc){
+        push(colaFotocs,idFotoc)
+        signal(hayFotocs)
+    }
+}
 ```
 </td><td>
 
+#### Persona
 ```c
-
+process Persona[id:0..n-1]{
+    Entrada.llegar(idFotoc)
+    Atencion[idFotoc].fotocopiar()
+    Entrada.salir(idFotoc)
+} 
 ```
+
+#### Empleado
+```c
+process Empleado{
+    for i= 0 to P-1{
+        Entrada.proximo()
+    }
+}
+```
+
+#### Atencion
+```c
+Monitor Atencion[id:0..9]{
+    Procedure fotocopiar(){
+        Fotocopiar()
+    }
+}
+```
+
 </td></tr></table>
 
 Tremenda fiaca hacer este :|
@@ -456,7 +509,7 @@ Tremenda fiaca hacer este :|
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
-## Ejercicio 4
+## Ejercicio 4 Este ejerciccio esta jodidamente asqueroso
 
 Existen N vehículos que deben pasar por un `puente` de acuerdo con el orden de llegada. 
 Considere que el puente no soporta más de 50000kg y que cada vehículo cuenta con su propio peso (ningún vehículo supera el peso soportado por el puente). 
@@ -471,7 +524,7 @@ Monitor Puente {
     colaPrioridad colaEspera;
 
     Procedure entrarPuente(int peso){
-        if (peso > capacidad or anot colaEspera.vacia()) {
+        if (peso > capacidad or not colaEspera.vacia()) {
             colaEspera.encolarOrdenado(peso);
             wait(espera);
 
@@ -506,7 +559,9 @@ Process Vehiculo [id:1..N]{
 }
 ```
 
-> Consultar
+#### Correcion
+
+![nueva](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/7ab34a70-cf9f-4baa-a1e2-481e9c6f5af4)
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
@@ -520,9 +575,13 @@ Cuando un cliente es llamado para ser atendido, entrega una lista con los produc
 ### Parte a)
 Resuelva considerando que el corralón tiene un único empleado.
 
-#### Corralon
+#### Monitores
 
-Supongo que un empleado se atiende de a uno a la vez. 
+<table>
+
+<tr><td>Corralon</td><td>Atencion</td></tr>
+
+<tr><td>
 
 ```c
 Monitor Corralon{
@@ -551,19 +610,42 @@ Monitor Corralon{
     }
 }
 ```
+</td><td>
 
-#### Atencion
 
-// Te lo debo este, alta fiaca
 ```c
 Monitor Atencion{
-    Procedure EntregarLista(String lista){
-
+    Procedure EntregarLista(in text lista, out text comprobante){
+        listaProductos= lista
+        entrego= true
+        signal(hayListas)
+        wait(entregoComprobante)
+        comprobante= comprobCompartido
+        signal(agarroComprobante)
+    }
+    Procedure EsperarLista(out text lista){
+        if(not entrego){
+            wait(hayListas)
+        }
+        lista= listaProductos
+    }
+    Procedure EntregarComprobante(in text comprobante){
+        comprobCompartido= comprobante
+        signal(entregoComprobante)
+        wait(agarroComprobante)
+        entrego= false -- resetear variable
     }
 }
 ```
+</td></tr>
+</table>
 
-#### Cliente
+#### Procesos
+
+<table><tr><td>Cliente</td><td>Empleado</td></tr>
+
+<tr><td>
+
 ```c
 Process Cliente [id:1..N]{
     listaProductos = Cliente.listaProductos();
@@ -573,8 +655,8 @@ Process Cliente [id:1..N]{
     Corralon.salir();
 }
 ```
+</td><td>
 
-#### Empleado
 ```c
 Procedure Empleado{
     for (i = 1 to N){
@@ -584,6 +666,9 @@ Procedure Empleado{
     }
 }
 ```
+</td></tr>
+</table>
+
 
 ### Parte b)
 Resuelva considerando que el corralón tiene E empleados (E > 1).
