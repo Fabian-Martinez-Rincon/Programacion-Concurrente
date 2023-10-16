@@ -585,56 +585,55 @@ Resuelva considerando que el corralón tiene un único empleado.
 
 ```c
 Monitor Corralon{
-    cond espera;
-    int esperando = 0;
-    int dentro = 0;
+  cond espera;
+  int esperando = 0;
+  int dentro = 0;
 
-    Procedure Entrar(){
-        if (dentro == 1){
-            esperando++;
-            wait(espera);
-        }
-        else{
-            dentro = 0;
-        }
+  Procedure Entrar(){
+    if (dentro == 1){
+      esperando++;
+      wait(espera);
     }
+    else{
+      dentro = 0;
+    }
+  }
 
-    Procedure Salir(){
-        if (esperando > 0){
-            esperando--;
-            signal(espera);
-        }
-        else{
-            dentro = 1;
-        }
+  Procedure Salir(){
+    if (esperando > 0){
+      esperando--;
+      signal(espera);
     }
+    else{
+      dentro = 1;
+    }
+  }
 }
 ```
 </td><td>
 
-
 ```c
 Monitor Atencion{
-    Procedure EntregarLista(in text lista, out text comprobante){
-        listaProductos= lista
-        entrego= true
-        signal(hayListas)
-        wait(entregoComprobante)
-        comprobante= comprobCompartido
-        signal(agarroComprobante)
+  Procedure EntregarLista(text lista, comprobante){
+    listaProductos= lista
+    entrego= true
+    signal(hayListas)
+    wait(entregoComprobante)
+    comprobante= comprobCompartido
+    signal(agarroComprobante)
+  }
+  Procedure EsperarLista(out text lista){
+    if(not entrego){
+      wait(hayListas)
     }
-    Procedure EsperarLista(out text lista){
-        if(not entrego){
-            wait(hayListas)
-        }
-        lista= listaProductos
-    }
-    Procedure EntregarComprobante(in text comprobante){
-        comprobCompartido= comprobante
-        signal(entregoComprobante)
-        wait(agarroComprobante)
-        entrego= false -- resetear variable
-    }
+    lista= listaProductos
+  }
+  Procedure EntregarComprobante(text comprobante){
+    comprobCompartido= comprobante
+    signal(entregoComprobante)
+    wait(agarroComprobante)
+    entrego= false -- resetear variable
+  }
 }
 ```
 </td></tr>
@@ -648,22 +647,21 @@ Monitor Atencion{
 
 ```c
 Process Cliente [id:1..N]{
-    listaProductos = Cliente.listaProductos();
-
-    Corralon.entrar();
-    Atencion.comprar(listaProductos);
-    Corralon.salir();
+  listaProductos = Cliente.listaProductos();
+  Corralon.entrar();
+  Atencion.comprar(listaProductos);
+  Corralon.salir();
 }
 ```
 </td><td>
 
 ```c
 Procedure Empleado{
-    for (i = 1 to N){
-        Atencion.esperarLista();
-        compronbante = Atencion.entregarComprobante();
-        Atencon.entregarComprobante(comprobante);
-    }
+  for (i = 1 to N){
+    Atencion.esperarLista();
+    compronbante = Atencion.entregarComprobante();
+    Atencon.entregarComprobante(comprobante);
+  }
 }
 ```
 </td></tr>
@@ -673,6 +671,92 @@ Procedure Empleado{
 ### Parte b)
 Resuelva considerando que el corralón tiene E empleados (E > 1).
 
+### Monitores
+
+#### Entrada
+
+```c
+Monitor Entrada{
+  int cantLibres= 0
+  int esperando
+  Procedure Entrar(out int idEmpleado){
+    if(cantLibres==0){
+      esperando++
+      wait(esperar)
+    }else{
+      cantLibres--
+    }
+    idEmpleado= pop(empleadosLibres)
+  }
+  Procedure Proximo(in int idEmpleado){
+    push(empleadosLibres,idEmpleado)
+    if(esperando>0){
+      esperando--
+      signal(esperar)
+    }else{
+    cantLibres++
+    }
+  }
+}
+```
+
+#### Atencion
+
+```c
+Monitor Atencion[id:0..E-1]{
+  Procedure EntregarLista(in text lista, out text comprobante){
+    listaCompartida= lista
+    entrego= true
+    signal(entregoLista)
+    wait(entregoComprobante)
+    comprobante= comprobanteCompartido
+    signal(agarroComprobante)
+  }
+  Procedure EsperaLista(out text lista){
+    if(not entrego) wait(entregoLista)
+    lista= listaCompartida
+  }
+  Procedure EntregarComprobante(in text comprobante){
+    comprobanteCompartido= comprobante
+    signal(entregoComprobante)
+    wait(agarroComprobante)
+    entrego= false
+  }
+}
+```
+
+
+#### Procesos
+
+<table><tr><td>Empleado</td><td>Cliente</td></tr>
+
+<tr><td>
+
+```c
+Process Empleado[id:0..E-1]{
+  while(true){
+    Entrada.Proximo(id)
+    Atencion[id].EsperaLista(lista)
+    // verifica la lista
+    comprobante = GenerarComprobante(lista)
+    Atencion[id].EntregarComprobante(comprobante)
+  }
+}
+```
+</td><td>
+
+```c
+Procedure Empleado{
+  for (i = 1 to N){
+    Atencion.esperarLista();
+    compronbante = Atencion.entregarComprobante();
+    Atencon.entregarComprobante(comprobante);
+  }
+}
+```
+</td></tr>
+</table>
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 
@@ -680,19 +764,180 @@ Resuelva considerando que el corralón tiene E empleados (E > 1).
 Existe una comisión de 50 alumnos que deben realizar tareas de a pares, las cuales son corregidas por un JTP. Cuando los alumnos llegan, forman una fila. Una vez que están todos en fila, el JTP les asigna un número de grupo a cada uno. Para ello, suponga que existe una función AsignarNroGrupo() que retorna un número “aleatorio” del 1 al 25. Cuando un alumno ha recibido su número de grupo, comienza a realizar su tarea. Al terminarla, el alumno le avisa al JTP y espera por su nota. Cuando los dos alumnos del grupo completaron la tarea, el JTP les asigna un puntaje (el primer grupo en terminar tendrá como nota 25, el segundo 24, y así sucesivamente hasta el último que tendrá nota 1). Nota: el JTP no guarda el número de grupo que le asigna a cada alumno.
 
 
+### Monitores
+
 #### Entrada
+
+```c
+Monitor Entrada{
+  int cantidad = 0;
+  Procedure Entrar(){
+    cantidad++;
+    if (cantidad==50){
+      signal(pasar)
+    }
+    wait(barrera)
+  }
+  Procedure Avisar(){
+    if(cantidad<50){
+      wait(pasar)
+    }
+    signal_all(barrera)
+  }
+}
+```
 
 #### Tareas
 
+```c
+Monitor Tareas{
+  int notaGeneral= 25
+  Procedure EsperarCorrecion(out int nota,in int idGrupo){
+    if (llego[idGrupo]){
+      push(terminaron,idGrupo)
+      signal(hayEntregados)
+    }else{
+      llego[idGrupo]= true
+    }
+    wait(corregido[idGrupo])
+    nota= notaGrupo[idGrupo]
+  }
+  Procedure CorregirGrupo(){
+    if(empty(terminaron)){
+      wait(hayEntregados)
+    }
+    idGrupo= pop(terminaron)
+    notaGrupo[idGrupo]= notaGeneral
+    notaGeneral--
+    signal_all(corregido[idGrupo])
+  }
+}
+```
+
 #### Grupos
 
-#### Alumnos
+```c
+Monitor Grupos{
+  Procedure DarNumero(in int numero){
+    push(colaNumeros,numero)
+    signal(hayNumeros)
+  }
+  Procedure ObtenerNumero(out int numero){
+    if(empty(colaNumeros)){
+      wait(hayNumeros)
+    }
+    numero = pop(colaNumeros)
+  }
+}
+```
+
+### Procesos
+
+<table><tr><td>Alumno</td><td>JTP</td></tr>
+
+<tr><td>
+
+```c
+A= 50
+Process Alumno[id:0..A-1]{
+  Entrada.Entrar()
+  int numeroGrupo
+  Grupos.ObtenerNumero(numeroGrupo)
+  -- hacer tarea
+  int nota
+  Tareas.EsperarCorrecion(nota,numeroGrupo)
+}
+```
+
+</td><td>
+
+```c
+Process JTP{
+  Entrada.Avisar()
+  for i= 1 to 50{
+    Grupos.DarNumero(AsignarNroGrupo())
+  }
+  for i= 1 to 25{
+    Tareas.CorregirGrupo()
+  }
+}
+```
+</td></tr>
+</table>
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 ## Ejercicio 7
 
 En un entrenamiento de fútbol hay 20 jugadores que forman 4 equipos (cada jugador conoce el equipo al cual pertenece llamando a la función DarEquipo()). Cuando un equipo está listo (han llegado los 5 jugadores que lo componen), debe enfrentarse a otro equipo que también esté listo (los dos primeros equipos en juntarse juegan en la cancha 1, y los otros dos equipos juegan en la cancha 2). Una vez que el equipo conoce la cancha en la que juega, sus jugadores se dirigen a ella. Cuando los 10 jugadores del partido llegaron a la cancha comienza el partido, juegan durante 50 minutos, y al terminar todos los jugadores del partido se retiran (no es necesario que se esperen para salir).
+
+### Monitores
+
+#### Cancha
+
+```c
+Monitor Cancha[id:0..1]{
+  Procedure Entrar(){
+    cant++
+    if(cant==10) signal(inicio)
+    wait(espera)
+  }
+
+  Procedure Iniciar(){
+    if(cant<10) wait(inicio)
+  }
+
+  Procedure Terminar(){
+    signal_all(espera)
+  }
+}
+```
+
+#### Entrada
+
+```c
+Monitor Entrada{
+  Procedure Llegar(in int numeroEquipo, out int numeroCancha){
+    cant[numeroEquipo]++
+    if(cant[numEquipo]==5){
+      cantEquipos++;
+      cancha[numEquipo]= cantCanchasUsadas
+      if(cantEquipos==2){
+        cantCanchasUsadas++
+      }
+      signal_all(espera[numEquipo])
+    }else{
+      wait(espera[numEquipo])
+    }
+    numeroCancha= cancha[numEquipo]
+  }
+}
+```
+
+### Procesos
+
+<table><tr><td>Partido</td><td>Jugador</td></tr>
+
+<tr><td>
+
+```c
+Process Jugador[id:0..19]{
+  Entrada.llegar(DarEquipo(),numeroCancha)
+  Cancha[numeroCancha].Entrar()
+}
+```
+
+</td><td>
+
+```c
+Process Partido[id:0..1]{
+  Cancha[id].Iniciar()
+  delay(50)
+  Cancha[id].Terminar()
+}
+```
+</td></tr>
+</table>
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
@@ -701,3 +946,100 @@ En un entrenamiento de fútbol hay 20 jugadores que forman 4 equipos (cada jugad
 Se debe simular una maratón con C corredores donde en la llegada hay UNA máquina expendedoras de agua con capacidad para 20 botellas. Además, existe un repositor encargado de reponer las botellas de la máquina. Cuando los C corredores han llegado al inicio comienza la carrera. Cuando un corredor termina la carrera se dirigen a la máquina expendedora, espera su turno (respetando el orden de llegada), saca una botella y se retira. Si encuentra la máquina sin botellas, le avisa al repositor para que cargue nuevamente la máquina con 20 botellas; espera a que se haga la recarga; saca una botella y se retira.
 
 > Nota: mientras se reponen las botellas se debe permitir que otros corredores se encolen. 
+
+### Monitores
+
+#### Carrera
+
+```c
+Monitor Carrera{
+  int llegaron = 0
+  cond esperandoCorrer
+  Process Llegue(){
+    llegaron++
+    if (llegaron == C){
+      signal_all(espera)
+    } else{
+      wait(espera)
+    }
+  }
+}
+```
+
+#### Maquina
+
+```c
+Monitor Maquina{
+  int botellas = 20
+  cond noHayBotellas, hayBotellas
+  Procedure Reponer(){
+    if (botellas!=0){
+      wait(noHayBotellas)
+    }
+    signal(hayBotellas)
+    botellas= 20
+  }
+  Procedure DameBotella(){
+    if (botellas == 0){
+      signal(noHayBotellas)
+      wait(hayBotellas)
+    }
+    botellas--
+  }
+}
+```
+
+#### UsarMaquina
+
+```c
+Monitor UsarMaquina{
+  cond espera
+  int esperando = 0
+  bool libre = true
+  Procedure Entrar(){
+    if(not libre){
+      esperando++
+      wait(espera)
+    }else{
+      libre= false
+    }
+  }
+
+  Procedure Salir(){
+    if (esperando>0){
+      esperando--
+      signal(espera)
+    }else{
+      libre= true
+    }
+  }
+}
+```
+
+### Procesos
+
+<table><tr><td>Corredor</td><td>Repositor</td></tr>
+
+<tr><td>
+
+```c
+Process Corredor[0..C-1]{
+  Carrera.Llegue()
+  -- correr
+  UsarMaquina.Entrar()
+  Maquina.DameBotella()
+  UsarMaquina.Salir()
+}
+```
+
+</td><td>
+
+```c
+Process Repositor{
+  while(true){
+    Maquina.Reponer()
+  }
+}
+```
+</td></tr>
+</table>

@@ -54,7 +54,8 @@
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h2 id="ejercicio-1">Ejercicio 1 </h2>
 <p>Se dispone de un puente por el cual puede pasar un solo auto a la vez. Un auto pide permiso para pasar por el puente, cruza por el mismo y luego sigue su camino.</p>
-<h4 id="puente">Puente </h4>
+<table><tbody><tr><td>Puente</td><td>Auto</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Puente<span class="token punctuation">{</span>
     cond cola<span class="token punctuation">;</span>
     bool ocupada <span class="token operator">=</span> false<span class="token punctuation">;</span>
@@ -70,13 +71,15 @@
         <span class="token function">signal</span><span class="token punctuation">(</span>cola<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="auto">Auto </h4>
+</code></pre></td><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Auto <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
     Puente<span class="token punctuation">.</span><span class="token function">entrarPuente</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//el auto cruza el puente</span>
     Puente<span class="token punctuation">.</span><span class="token function">salirPuente</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="parte-a">Parte a </h3>
+</code></pre></td></tr>
+</tbody></table>
+<h3 id="parte-a">Parte a </h3>
 <p><strong>¿El código funciona correctamente? Justifique su respuesta.</strong></p>
 <p><strong>RTA</strong> El ejercicio parece estar bien, el primero al tener cant = 0, no entra en el puente e incrementa la cantidad de <code>cant</code> en uno. Despues de el primer coche, todos los demas se encolan y se duermen en el <code>wait</code>. Al momento de salir un auto, se hace <code>signal</code> y se despierta al siguiente auto en la cola.</p>
 <h3 id="parte-b">Parte b </h3>
@@ -217,7 +220,9 @@
 <hr>
 <h3 id="parte-c-1">Parte c) </h3>
 <p>Modifique la solución de (b) para el caso en que se deba dar prioridad de acuerdo con la edad de cada persona (cuando la fotocopiadora está libre la debe usar la persona de mayor edad entre las que estén esperando para usarla).</p>
-<h4 id="fotocopiadora">Fotocopiadora </h4>
+<table>
+<tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
     ColaPrioridad cola<span class="token punctuation">;</span>
     <span class="token keyword keyword-int">int</span> ocupada <span class="token operator">=</span> false<span class="token punctuation">;</span>
@@ -242,45 +247,50 @@
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="personas">Personas </h4>
+</code></pre></td><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
     edad <span class="token operator">=</span> Persona<span class="token punctuation">.</span><span class="token function">edad</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span>u<span class="token punctuation">,</span> edad<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//Fotocopiar</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
+</code></pre></td></tr>
+</tbody></table>
 <hr>
 <h3 id="parte-d">Parte d) </h3>
 <p>Modifique la solución de (a) para el caso en que se deba respetar estrictamente el orden dado por el identificador del proceso (la persona X no puede usar la fotocopiadora hasta que no haya terminado de usarla la persona X-1).</p>
-<h4 id="fotocopiadora-1">Fotocopiadora </h4>
+<h4>{}</h4>
+<table>
+<tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
-    cond espera<span class="token punctuation">;</span>
-    <span class="token keyword keyword-int">int</span> siguiente <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    cond espera<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> siguiente <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 
-    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> u<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span>u <span class="token operator">!=</span> siguiente <span class="token punctuation">)</span><span class="token punctuation">{</span>
-            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> id<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>u <span class="token operator">!=</span> siguiente <span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        siguiente<span class="token operator">++</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-
-    
     Procedure <span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        siguiente<span class="token operator">++</span>
         <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="personas-1">Personas </h4>
-<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>u<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span>u<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//Fotocopiar</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-
-</code></pre><hr>
+</code></pre></td></tr>
+</tbody></table>
+<hr>
 <h3 id="parte-e">Parte e) </h3>
 <p>Modifique la solución de (b) para el caso en que además haya un Empleado que le indica a cada persona cuando debe usar la fotocopiadora.</p>
-<h4 id="fotocopiadora-2">Fotocopiadora </h4>
+<table>
+<tbody><tr><td>Monitor</td><td>Procesos</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Fotocopiadora<span class="token punctuation">{</span>
     cond espera<span class="token punctuation">;</span>
     <span class="token keyword keyword-int">int</span> cant <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -306,40 +316,86 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
-</code></pre><h4 id="personas-2">Personas </h4>
-<pre data-role="codeBlock" data-info="c" class="language-c c"><code><span class="token comment">// El proceso deberia tener una senial para esperar que le confirma</span>
-<span class="token comment">// El empleado o como hago esta parte?</span>
-Process Persona <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span> <span class="token comment">//id es el id de la persona</span>
+</code></pre></td><td>
+<h4 id="persona">Persona </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Persona <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//Fotocopiar</span>
     Fotocopiadora<span class="token punctuation">.</span><span class="token function">terminarFotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre><h4 id="empleado">Empleado </h4>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Empleado <span class="token punctuation">{</span>
-    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span> to N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        Persona<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span> to n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        Persona<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><hr>
+</code></pre></td></tr>
+</tbody></table>
+<hr>
 <h3 id="parte-f">Parte f) </h3>
 <p>Modificar la solución (e) para el caso en que sean 10 fotocopiadoras. El empleado le indica a la persona cuál fotocopiadora usar y cuándo hacerlo.</p>
-<table><tbody><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<table><tbody><tr><td>Fotocopiadora</td><td>Procesos</td></tr>
 <tr><td>
-<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td><td>
-<pre data-role="codeBlock" data-info="c" class="language-c c"><code></code></pre></td></tr></tbody></table>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Entrada<span class="token punctuation">{</span>
+    Cola<span class="token operator">&lt;</span><span class="token keyword keyword-int">int</span><span class="token operator">&gt;</span> colaFotocs
+    <span class="token keyword keyword-for">for</span> i<span class="token operator">=</span> <span class="token number">0</span> to <span class="token number">9</span><span class="token punctuation">{</span>
+        <span class="token function">push</span><span class="token punctuation">(</span>colaFotocs<span class="token punctuation">,</span>i<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    Procedure <span class="token function">llegar</span><span class="token punctuation">(</span>out <span class="token keyword keyword-int">int</span> idFotoc<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cantEsperando<span class="token operator">++</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>hayPersonas<span class="token punctuation">)</span>
+        <span class="token function">wait</span><span class="token punctuation">(</span>usar<span class="token punctuation">)</span>
+        idFotoc<span class="token operator">=</span> <span class="token function">pop</span><span class="token punctuation">(</span>colaFotocs<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">proximo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cantEsperando<span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>hayPersonas<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        cantEsperando<span class="token operator">--</span>
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span>colaFotocs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token function">wait</span><span class="token punctuation">(</span>hayFotocs<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>usar<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    Procedure <span class="token function">salir</span><span class="token punctuation">(</span>in <span class="token keyword keyword-int">int</span> idFotoc<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token function">push</span><span class="token punctuation">(</span>colaFotocs<span class="token punctuation">,</span>idFotoc<span class="token punctuation">)</span>
+        <span class="token function">signal</span><span class="token punctuation">(</span>hayFotocs<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<h4 id="persona-1">Persona </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>process Persona<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Entrada<span class="token punctuation">.</span><span class="token function">llegar</span><span class="token punctuation">(</span>idFotoc<span class="token punctuation">)</span>
+    Atencion<span class="token punctuation">[</span>idFotoc<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    Entrada<span class="token punctuation">.</span><span class="token function">salir</span><span class="token punctuation">(</span>idFotoc<span class="token punctuation">)</span>
+<span class="token punctuation">}</span> 
+</code></pre><h4 id="empleado-1">Empleado </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>process Empleado<span class="token punctuation">{</span>
+    <span class="token keyword keyword-for">for</span> i<span class="token operator">=</span> <span class="token number">0</span> to P<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">{</span>
+        Entrada<span class="token punctuation">.</span><span class="token function">proximo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="atencion">Atencion </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Atencion<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token number">.9</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+    Procedure <span class="token function">fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token function">Fotocopiar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr></tbody></table>
 <p>Tremenda fiaca hacer este 😐</p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
-<h2 id="ejercicio-4">Ejercicio 4 </h2>
+<h2 id="ejercicio-4-este-ejerciccio-esta-jodidamente-asqueroso">Ejercicio 4 Este ejerciccio esta jodidamente asqueroso </h2>
 <p>Existen N vehículos que deben pasar por un <code>puente</code> de acuerdo con el orden de llegada.<br>
 Considere que el puente no soporta más de 50000kg y que cada vehículo cuenta con su propio peso (ningún vehículo supera el peso soportado por el puente).</p>
-<h4 id="puente-1">Puente </h4>
+<h4 id="puente">Puente </h4>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Puente <span class="token punctuation">{</span>
     <span class="token keyword keyword-int">int</span> capacidad <span class="token number">50000</span><span class="token punctuation">;</span>
     cond espera<span class="token punctuation">;</span>
     colaPrioridad colaEspera<span class="token punctuation">;</span>
 
     Procedure <span class="token function">entrarPuente</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> peso<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>peso <span class="token operator">&gt;</span> capacidad or anot colaEspera<span class="token punctuation">.</span><span class="token function">vacia</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>peso <span class="token operator">&gt;</span> capacidad or not colaEspera<span class="token punctuation">.</span><span class="token function">vacia</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             colaEspera<span class="token punctuation">.</span><span class="token function">encolarOrdenado</span><span class="token punctuation">(</span>peso<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -367,83 +423,369 @@ Considere que el puente no soporta más de 50000kg y que cada vehículo cuenta c
     <span class="token comment">//Cruzar</span>
     Puente<span class="token punctuation">.</span><span class="token function">salirPuente</span><span class="token punctuation">(</span>peso<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><blockquote>
-<p>Consultar</p>
-</blockquote>
+</code></pre><h4 id="correcion">Correcion </h4>
+<p><img src="https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/7ab34a70-cf9f-4baa-a1e2-481e9c6f5af4" alt="nueva"></p>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h2 id="ejercicio-5">Ejercicio 5 </h2>
 <p>En un corralón de materiales se deben atender a N clientes de acuerdo con el orden de llegada.</p>
 <p>Cuando un cliente es llamado para ser atendido, entrega una lista con los productos que comprará, y espera a que alguno de los empleados le entregue el comprobante de la compra realizada.</p>
 <h3 id="parte-a-3">Parte a) </h3>
 <p>Resuelva considerando que el corralón tiene un único empleado.</p>
-<h4 id="corralon">Corralon </h4>
-<p>Supongo que un empleado se atiende de a uno a la vez.</p>
+<h4 id="monitores">Monitores </h4>
+<table>
+<tbody><tr><td>Corralon</td><td>Atencion</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Corralon<span class="token punctuation">{</span>
-    cond espera<span class="token punctuation">;</span>
-    <span class="token keyword keyword-int">int</span> esperando <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword keyword-int">int</span> dentro <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  cond espera<span class="token punctuation">;</span>
+  <span class="token keyword keyword-int">int</span> esperando <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword keyword-int">int</span> dentro <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 
-    Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>dentro <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            esperando<span class="token operator">++</span><span class="token punctuation">;</span>
-            <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
-            dentro <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
+  Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>dentro <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">++</span><span class="token punctuation">;</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+    <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      dentro <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
 
-    Procedure <span class="token function">Salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>esperando <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            esperando<span class="token operator">--</span><span class="token punctuation">;</span>
-            <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
-            dentro <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
+  Procedure <span class="token function">Salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>esperando <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">--</span><span class="token punctuation">;</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+    <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      dentro <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="atencion">Atencion </h4>
-<p>// Te lo debo este, alta fiaca</p>
+</code></pre></td><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Atencion<span class="token punctuation">{</span>
-    Procedure <span class="token function">EntregarLista</span><span class="token punctuation">(</span>String lista<span class="token punctuation">)</span><span class="token punctuation">{</span>
-
+  Procedure <span class="token function">EntregarLista</span><span class="token punctuation">(</span>text lista<span class="token punctuation">,</span> comprobante<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    listaProductos<span class="token operator">=</span> lista
+    entrego<span class="token operator">=</span> true
+    <span class="token function">signal</span><span class="token punctuation">(</span>hayListas<span class="token punctuation">)</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>entregoComprobante<span class="token punctuation">)</span>
+    comprobante<span class="token operator">=</span> comprobCompartido
+    <span class="token function">signal</span><span class="token punctuation">(</span>agarroComprobante<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">EsperarLista</span><span class="token punctuation">(</span>out text lista<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>not entrego<span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>hayListas<span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
+    lista<span class="token operator">=</span> listaProductos
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">EntregarComprobante</span><span class="token punctuation">(</span>text comprobante<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    comprobCompartido<span class="token operator">=</span> comprobante
+    <span class="token function">signal</span><span class="token punctuation">(</span>entregoComprobante<span class="token punctuation">)</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>agarroComprobante<span class="token punctuation">)</span>
+    entrego<span class="token operator">=</span> false <span class="token operator">--</span> resetear variable
+  <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="cliente">Cliente </h4>
+</code></pre></td></tr>
+</tbody></table>
+<h4 id="procesos">Procesos </h4>
+<table><tbody><tr><td>Cliente</td><td>Empleado</td></tr>
+<tr><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Cliente <span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">1.</span><span class="token punctuation">.</span>N<span class="token punctuation">]</span><span class="token punctuation">{</span>
-    listaProductos <span class="token operator">=</span> Cliente<span class="token punctuation">.</span><span class="token function">listaProductos</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    Corralon<span class="token punctuation">.</span><span class="token function">entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Atencion<span class="token punctuation">.</span><span class="token function">comprar</span><span class="token punctuation">(</span>listaProductos<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Corralon<span class="token punctuation">.</span><span class="token function">salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  listaProductos <span class="token operator">=</span> Cliente<span class="token punctuation">.</span><span class="token function">listaProductos</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  Corralon<span class="token punctuation">.</span><span class="token function">entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  Atencion<span class="token punctuation">.</span><span class="token function">comprar</span><span class="token punctuation">(</span>listaProductos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  Corralon<span class="token punctuation">.</span><span class="token function">salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h4 id="empleado-1">Empleado </h4>
+</code></pre></td><td>
 <pre data-role="codeBlock" data-info="c" class="language-c c"><code>Procedure Empleado<span class="token punctuation">{</span>
-    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span> to N<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        Atencion<span class="token punctuation">.</span><span class="token function">esperarLista</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        compronbante <span class="token operator">=</span> Atencion<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Atencon<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span>comprobante<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+  <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span> to N<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Atencion<span class="token punctuation">.</span><span class="token function">esperarLista</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    compronbante <span class="token operator">=</span> Atencion<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Atencon<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span>comprobante<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="parte-b-3">Parte b) </h3>
+</code></pre></td></tr>
+</tbody></table>
+<h3 id="parte-b-3">Parte b) </h3>
 <p>Resuelva considerando que el corralón tiene E empleados (E &gt; 1).</p>
+<h3 id="monitores-1">Monitores </h3>
+<h4 id="entrada">Entrada </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Entrada<span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> cantLibres<span class="token operator">=</span> <span class="token number">0</span>
+  <span class="token keyword keyword-int">int</span> esperando
+  Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span>out <span class="token keyword keyword-int">int</span> idEmpleado<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cantLibres<span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">++</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>esperar<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      cantLibres<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    idEmpleado<span class="token operator">=</span> <span class="token function">pop</span><span class="token punctuation">(</span>empleadosLibres<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">Proximo</span><span class="token punctuation">(</span>in <span class="token keyword keyword-int">int</span> idEmpleado<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token function">push</span><span class="token punctuation">(</span>empleadosLibres<span class="token punctuation">,</span>idEmpleado<span class="token punctuation">)</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>esperando<span class="token operator">&gt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">--</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>esperar<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+    cantLibres<span class="token operator">++</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="atencion-1">Atencion </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Atencion<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>E<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Procedure <span class="token function">EntregarLista</span><span class="token punctuation">(</span>in text lista<span class="token punctuation">,</span> out text comprobante<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    listaCompartida<span class="token operator">=</span> lista
+    entrego<span class="token operator">=</span> true
+    <span class="token function">signal</span><span class="token punctuation">(</span>entregoLista<span class="token punctuation">)</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>entregoComprobante<span class="token punctuation">)</span>
+    comprobante<span class="token operator">=</span> comprobanteCompartido
+    <span class="token function">signal</span><span class="token punctuation">(</span>agarroComprobante<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">EsperaLista</span><span class="token punctuation">(</span>out text lista<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>not entrego<span class="token punctuation">)</span> <span class="token function">wait</span><span class="token punctuation">(</span>entregoLista<span class="token punctuation">)</span>
+    lista<span class="token operator">=</span> listaCompartida
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">EntregarComprobante</span><span class="token punctuation">(</span>in text comprobante<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    comprobanteCompartido<span class="token operator">=</span> comprobante
+    <span class="token function">signal</span><span class="token punctuation">(</span>entregoComprobante<span class="token punctuation">)</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>agarroComprobante<span class="token punctuation">)</span>
+    entrego<span class="token operator">=</span> false
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="procesos-1">Procesos </h4>
+<table><tbody><tr><td>Empleado</td><td>Cliente</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Empleado<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>E<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Entrada<span class="token punctuation">.</span><span class="token function">Proximo</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span>
+    Atencion<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">EsperaLista</span><span class="token punctuation">(</span>lista<span class="token punctuation">)</span>
+    <span class="token comment">// verifica la lista</span>
+    comprobante <span class="token operator">=</span> <span class="token function">GenerarComprobante</span><span class="token punctuation">(</span>lista<span class="token punctuation">)</span>
+    Atencion<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">EntregarComprobante</span><span class="token punctuation">(</span>comprobante<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Procedure Empleado<span class="token punctuation">{</span>
+  <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span> to N<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Atencion<span class="token punctuation">.</span><span class="token function">esperarLista</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    compronbante <span class="token operator">=</span> Atencion<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Atencon<span class="token punctuation">.</span><span class="token function">entregarComprobante</span><span class="token punctuation">(</span>comprobante<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h2 id="ejercicio-6">Ejercicio 6 </h2>
 <p>Existe una comisión de 50 alumnos que deben realizar tareas de a pares, las cuales son corregidas por un JTP. Cuando los alumnos llegan, forman una fila. Una vez que están todos en fila, el JTP les asigna un número de grupo a cada uno. Para ello, suponga que existe una función AsignarNroGrupo() que retorna un número “aleatorio” del 1 al 25. Cuando un alumno ha recibido su número de grupo, comienza a realizar su tarea. Al terminarla, el alumno le avisa al JTP y espera por su nota. Cuando los dos alumnos del grupo completaron la tarea, el JTP les asigna un puntaje (el primer grupo en terminar tendrá como nota 25, el segundo 24, y así sucesivamente hasta el último que tendrá nota 1). Nota: el JTP no guarda el número de grupo que le asigna a cada alumno.</p>
-<h4 id="entrada">Entrada </h4>
-<h4 id="tareas">Tareas </h4>
-<h4 id="grupos">Grupos </h4>
-<h4 id="alumnos">Alumnos </h4>
+<h3 id="monitores-2">Monitores </h3>
+<h4 id="entrada-1">Entrada </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Entrada<span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> cantidad <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    cantidad<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>cantidad<span class="token operator">==</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>pasar<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>barrera<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">Avisar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cantidad<span class="token operator">&lt;</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>pasar<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">signal_all</span><span class="token punctuation">(</span>barrera<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="tareas">Tareas </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Tareas<span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> notaGeneral<span class="token operator">=</span> <span class="token number">25</span>
+  Procedure <span class="token function">EsperarCorrecion</span><span class="token punctuation">(</span>out <span class="token keyword keyword-int">int</span> nota<span class="token punctuation">,</span>in <span class="token keyword keyword-int">int</span> idGrupo<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>llego<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">push</span><span class="token punctuation">(</span>terminaron<span class="token punctuation">,</span>idGrupo<span class="token punctuation">)</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>hayEntregados<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      llego<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span><span class="token operator">=</span> true
+    <span class="token punctuation">}</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>corregido<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    nota<span class="token operator">=</span> notaGrupo<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">CorregirGrupo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span>terminaron<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>hayEntregados<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    idGrupo<span class="token operator">=</span> <span class="token function">pop</span><span class="token punctuation">(</span>terminaron<span class="token punctuation">)</span>
+    notaGrupo<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span><span class="token operator">=</span> notaGeneral
+    notaGeneral<span class="token operator">--</span>
+    <span class="token function">signal_all</span><span class="token punctuation">(</span>corregido<span class="token punctuation">[</span>idGrupo<span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="grupos">Grupos </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Grupos<span class="token punctuation">{</span>
+  Procedure <span class="token function">DarNumero</span><span class="token punctuation">(</span>in <span class="token keyword keyword-int">int</span> numero<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token function">push</span><span class="token punctuation">(</span>colaNumeros<span class="token punctuation">,</span>numero<span class="token punctuation">)</span>
+    <span class="token function">signal</span><span class="token punctuation">(</span>hayNumeros<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">ObtenerNumero</span><span class="token punctuation">(</span>out <span class="token keyword keyword-int">int</span> numero<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">empty</span><span class="token punctuation">(</span>colaNumeros<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>hayNumeros<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    numero <span class="token operator">=</span> <span class="token function">pop</span><span class="token punctuation">(</span>colaNumeros<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h3 id="procesos-2">Procesos </h3>
+<table><tbody><tr><td>Alumno</td><td>JTP</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>A<span class="token operator">=</span> <span class="token number">50</span>
+Process Alumno<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token punctuation">.</span>A<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Entrada<span class="token punctuation">.</span><span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword keyword-int">int</span> numeroGrupo
+  Grupos<span class="token punctuation">.</span><span class="token function">ObtenerNumero</span><span class="token punctuation">(</span>numeroGrupo<span class="token punctuation">)</span>
+  <span class="token operator">--</span> hacer tarea
+  <span class="token keyword keyword-int">int</span> nota
+  Tareas<span class="token punctuation">.</span><span class="token function">EsperarCorrecion</span><span class="token punctuation">(</span>nota<span class="token punctuation">,</span>numeroGrupo<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process JTP<span class="token punctuation">{</span>
+  Entrada<span class="token punctuation">.</span><span class="token function">Avisar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword keyword-for">for</span> i<span class="token operator">=</span> <span class="token number">1</span> to <span class="token number">50</span><span class="token punctuation">{</span>
+    Grupos<span class="token punctuation">.</span><span class="token function">DarNumero</span><span class="token punctuation">(</span><span class="token function">AsignarNroGrupo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword keyword-for">for</span> i<span class="token operator">=</span> <span class="token number">1</span> to <span class="token number">25</span><span class="token punctuation">{</span>
+    Tareas<span class="token punctuation">.</span><span class="token function">CorregirGrupo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h2 id="ejercicio-7">Ejercicio 7 </h2>
 <p>En un entrenamiento de fútbol hay 20 jugadores que forman 4 equipos (cada jugador conoce el equipo al cual pertenece llamando a la función DarEquipo()). Cuando un equipo está listo (han llegado los 5 jugadores que lo componen), debe enfrentarse a otro equipo que también esté listo (los dos primeros equipos en juntarse juegan en la cancha 1, y los otros dos equipos juegan en la cancha 2). Una vez que el equipo conoce la cancha en la que juega, sus jugadores se dirigen a ella. Cuando los 10 jugadores del partido llegaron a la cancha comienza el partido, juegan durante 50 minutos, y al terminar todos los jugadores del partido se retiran (no es necesario que se esperen para salir).</p>
+<h3 id="monitores-3">Monitores </h3>
+<h4 id="cancha">Cancha </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Cancha<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token number">.1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    cant<span class="token operator">++</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cant<span class="token operator">==</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token function">signal</span><span class="token punctuation">(</span>inicio<span class="token punctuation">)</span>
+    <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  Procedure <span class="token function">Iniciar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cant<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token function">wait</span><span class="token punctuation">(</span>inicio<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  Procedure <span class="token function">Terminar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token function">signal_all</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="entrada-2">Entrada </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Entrada<span class="token punctuation">{</span>
+  Procedure <span class="token function">Llegar</span><span class="token punctuation">(</span>in <span class="token keyword keyword-int">int</span> numeroEquipo<span class="token punctuation">,</span> out <span class="token keyword keyword-int">int</span> numeroCancha<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    cant<span class="token punctuation">[</span>numeroEquipo<span class="token punctuation">]</span><span class="token operator">++</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cant<span class="token punctuation">[</span>numEquipo<span class="token punctuation">]</span><span class="token operator">==</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      cantEquipos<span class="token operator">++</span><span class="token punctuation">;</span>
+      cancha<span class="token punctuation">[</span>numEquipo<span class="token punctuation">]</span><span class="token operator">=</span> cantCanchasUsadas
+      <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>cantEquipos<span class="token operator">==</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        cantCanchasUsadas<span class="token operator">++</span>
+      <span class="token punctuation">}</span>
+      <span class="token function">signal_all</span><span class="token punctuation">(</span>espera<span class="token punctuation">[</span>numEquipo<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">[</span>numEquipo<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    numeroCancha<span class="token operator">=</span> cancha<span class="token punctuation">[</span>numEquipo<span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h3 id="procesos-3">Procesos </h3>
+<table><tbody><tr><td>Partido</td><td>Jugador</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Jugador<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token number">.19</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Entrada<span class="token punctuation">.</span><span class="token function">llegar</span><span class="token punctuation">(</span><span class="token function">DarEquipo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>numeroCancha<span class="token punctuation">)</span>
+  Cancha<span class="token punctuation">[</span>numeroCancha<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Partido<span class="token punctuation">[</span>id<span class="token operator">:</span><span class="token number">0.</span><span class="token number">.1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Cancha<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">Iniciar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>
+  Cancha<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">Terminar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr>
+</tbody></table>
 <img src="https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif" height="20" width="100%">
 <h2 id="ejercicio-8">Ejercicio 8 </h2>
 <p>Se debe simular una maratón con C corredores donde en la llegada hay UNA máquina expendedoras de agua con capacidad para 20 botellas. Además, existe un repositor encargado de reponer las botellas de la máquina. Cuando los C corredores han llegado al inicio comienza la carrera. Cuando un corredor termina la carrera se dirigen a la máquina expendedora, espera su turno (respetando el orden de llegada), saca una botella y se retira. Si encuentra la máquina sin botellas, le avisa al repositor para que cargue nuevamente la máquina con 20 botellas; espera a que se haga la recarga; saca una botella y se retira.</p>
 <blockquote>
 <p>Nota: mientras se reponen las botellas se debe permitir que otros corredores se encolen.</p>
 </blockquote>
+<h3 id="monitores-4">Monitores </h3>
+<h4 id="carrera">Carrera </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Carrera<span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> llegaron <span class="token operator">=</span> <span class="token number">0</span>
+  cond esperandoCorrer
+  Process <span class="token function">Llegue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    llegaron<span class="token operator">++</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>llegaron <span class="token operator">==</span> C<span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">signal_all</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="maquina">Maquina </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor Maquina<span class="token punctuation">{</span>
+  <span class="token keyword keyword-int">int</span> botellas <span class="token operator">=</span> <span class="token number">20</span>
+  cond noHayBotellas<span class="token punctuation">,</span> hayBotellas
+  Procedure <span class="token function">Reponer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>botellas<span class="token operator">!=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>noHayBotellas<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">signal</span><span class="token punctuation">(</span>hayBotellas<span class="token punctuation">)</span>
+    botellas<span class="token operator">=</span> <span class="token number">20</span>
+  <span class="token punctuation">}</span>
+  Procedure <span class="token function">DameBotella</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>botellas <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>noHayBotellas<span class="token punctuation">)</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>hayBotellas<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    botellas<span class="token operator">--</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h4 id="usarmaquina">UsarMaquina </h4>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Monitor UsarMaquina<span class="token punctuation">{</span>
+  cond espera
+  <span class="token keyword keyword-int">int</span> esperando <span class="token operator">=</span> <span class="token number">0</span>
+  bool libre <span class="token operator">=</span> true
+  Procedure <span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span>not libre<span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">++</span>
+      <span class="token function">wait</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      libre<span class="token operator">=</span> false
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  Procedure <span class="token function">Salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>esperando<span class="token operator">&gt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      esperando<span class="token operator">--</span>
+      <span class="token function">signal</span><span class="token punctuation">(</span>espera<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token keyword keyword-else">else</span><span class="token punctuation">{</span>
+      libre<span class="token operator">=</span> true
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><h3 id="procesos-4">Procesos </h3>
+<table><tbody><tr><td>Corredor</td><td>Repositor</td></tr>
+<tr><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Corredor<span class="token punctuation">[</span><span class="token number">0.</span><span class="token punctuation">.</span>C<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
+  Carrera<span class="token punctuation">.</span><span class="token function">Llegue</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token operator">--</span> correr
+  UsarMaquina<span class="token punctuation">.</span><span class="token function">Entrar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  Maquina<span class="token punctuation">.</span><span class="token function">DameBotella</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  UsarMaquina<span class="token punctuation">.</span><span class="token function">Salir</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></td><td>
+<pre data-role="codeBlock" data-info="c" class="language-c c"><code>Process Repositor<span class="token punctuation">{</span>
+  <span class="token keyword keyword-while">while</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Maquina<span class="token punctuation">.</span><span class="token function">Reponer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></td></tr>
+</tbody></table>
 
       </div>
       
