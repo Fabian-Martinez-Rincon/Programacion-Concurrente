@@ -34,33 +34,38 @@
 
 Se dispone de un puente por el cual puede pasar un solo auto a la vez. Un auto pide permiso para pasar por el puente, cruza por el mismo y luego sigue su camino.
 
+<table><tr><td>Puente</td><td>Auto</td></tr>
 
-#### Puente
+<tr><td>
+
 ```c
-Monitor Puente
+Monitor Puente{
     cond cola;
-    int cant= 0;
-    Procedure entrarPuente ()
-        while ( cant > 0) 
+    bool ocupada = false;
+    Procedure entrarPuente (){
+        while (ocupada){ 
             wait (cola);
-        cant = cant + 1;
-    end;
-    Procedure salirPuente ()
-        cant = cant – 1;
+        }
+        ocupada = true
+    }
+
+    Procedure salirPuente (){
+        ocupada = false
         signal(cola);
-    end;
-End Monitor;
-
+    }
+}
 ```
+</td><td>
 
-#### Auto
 ```c
-Process Auto [a:1..M]
-    Puente. entrarPuente (a);
+Process Auto [id:0..n-1]{
+    Puente.entrarPuente();
     //el auto cruza el puente
-    Puente. salirPuente(a);
-End Process;
+    Puente.salirPuente();
+}
 ```
+</td></tr>
+</table>
 
 
 
@@ -75,7 +80,10 @@ End Process;
 
 **RTA** Se podria simplificar a un solo procedimiento cruzar que cruce el puente. No es necesario la variable condition (`cant`)
 
-#### Puente
+<table>
+<tr><td>Puente</td><td>Auto</td></tr>
+<tr><td>
+
 ```c
 Monitor Puente{
     Procedure cruzarPuente (){
@@ -83,15 +91,18 @@ Monitor Puente{
     }
 }
 ```
+</td><td>
 
-#### Auto
 ```c
-Process Auto [a:1..M]{
-    Puente.cruzarPuente(); //Hace falta pasar el id por pasametro?
+Process Auto [id:0..n-1]{
+    Puente.cruzarPuente();
 }
 ```
+</td></tr></table>
 
-> Queria preguntar si hace falta hacer el codigo por cada pregunta
+
+
+
 
 ### Parte c
 ¿La solución original respeta el orden de llegada de los vehículos? 
@@ -133,8 +144,9 @@ En resumen, esta solución utiliza un monitor para controlar el acceso concurren
 
 Implemente el acceso a la base por parte de los procesos, sabiendo que el motor de base de datos puede atender a lo sumo 5 consultas de lectura simultáneas.
 
-
-#### Base de Datos
+<table>
+<tr><td>Base de Datos</td><td>Usuarios</td></tr>
+<tr><td>
 
 ```c
 Monitor BaseDeDatos{
@@ -152,18 +164,21 @@ Monitor BaseDeDatos{
     }
 }
 ```
-
-#### Usuarios(Que piden consultas)
+</td><td>
 
 ```c
-Process Usuario [u:1..N]{
+Process Usuario [id:0..n-1]{
     BaseDeDatos.leer();
     //Leer
     BaseDeDatos.terminarLectura();
 }
 ```
+</td></tr>
+</table>
 
-</td></tr></table>
+
+
+
 
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
@@ -173,39 +188,43 @@ Existen N personas que deben fotocopiar un documento. La fotocopiadora sólo pue
 
 ---
 
-### Parte a) 
+### Parte a)
 
 Implemente una solución suponiendo no importa el orden de uso. Existe una función Fotocopiar() que simula el uso de la fotocopiadora.
 
-#### Fotocopiadora
+<table><tr><td>Fotocopiadora</td><td>Personas</td></tr>
+
+<tr><td>
 
 ```c
 Monitor Fotocopiadora{
     cond espera;
-    int cant = 0;
+    bool ocupada = false;
     Procedure fotocopiar(){
-        while(cant == 1 ){
+        while(ocupada){
             wait(espera);
         }
-        cant++;
+        ocupada=true
     }
     Procedure terminarFotocopiar(){
-        cant--;
+        ocupada=false
         signal(espera);
     }
 }
 ```
-
-#### Personas
+</td><td>
 
 ```c
-Process Persona [u:1..N-1]{
+Process Persona [id:0..n-1]{
     Fotocopiadora.fotocopiar();
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
 }
 ```
-</td></tr></table>
+</td></tr>
+</table>
+
+
 
 ---
 
@@ -213,21 +232,23 @@ Process Persona [u:1..N-1]{
 
 Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.
 
-#### Fotocopiadora
+<table>
+<tr><td>Fotocopiadora</td><td>Personas</td></tr>
+<tr><td>
 
 ```c
 Monitor Fotocopiadora{
-    cond espera;
-    int cant = 0;
-    int cantEsperan = 0;
+    cond espera
+    bool ocupada = false
+    int cantEsperan = 0
 
     Procedure fotocopiar(){
-        if(cant == 1 ){
-            cantEsperan++;
-            wait(espera);
+        if( ocupada ){
+            cantEsperan++
+            wait(espera)
         }
         else{
-            cant++;
+            ocupada=true
         }
     }
     Procedure terminarFotocopiar(){
@@ -236,25 +257,25 @@ Monitor Fotocopiadora{
             signal(espera);
         }
         else{
-            cant--;
+            ocupada=false
         }
     }
 }
 ```
-
-#### Personas
+</td><td>
 
 ```c
-Process Persona [u:1..N-1]{
+Process Persona [id:0..n-1]{
     Fotocopiadora.fotocopiar();
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
 }
 ```
+</td></tr>
+
+</table>
 
 > Usamos cant para representar la cantidad de personas que estan usando la fotocopiadora y cantEsperan para representar la cantidad de personas que estan esperando para usar la fotocopiadora
-
-</td></tr></table>
 
 ---
 
@@ -262,26 +283,29 @@ Process Persona [u:1..N-1]{
 
 Modifique la solución de (b) para el caso en que se deba dar prioridad de acuerdo con la edad de cada persona (cuando la fotocopiadora está libre la debe usar la persona de mayor edad entre las que estén esperando para usarla).
 
-#### Fotocopiadora
+<table>
+<tr><td>Fotocopiadora</td><td>Personas</td></tr>
+
+<tr><td>
 
 ```c
 Monitor Fotocopiadora{
     ColaPrioridad cola;
-    int cant = 0;
+    int ocupada = false;
     cond espera[N];
 
     procerdure fotocopiar(int u, int edad){
-        if(cant == 1 ){
+        if(ocupada){
             cola.encolarOrdenado(u, edad);
             wait(espera[u]);
         }
         else{
-            cant++;
+            ocupada=true;
         }
     }
     procerdure terminarFotocopiar(){
         if (cola.vacia()){
-            cant--;
+            ocupada=false
         }
         else{
             int u = cola.desencolar();
@@ -290,18 +314,19 @@ Monitor Fotocopiadora{
     }
 }
 ```
-
-#### Personas
+</td><td>
 
 ```c
-Process Persona [u:1..N-1]{
+Process Persona [id:0..n-1]{
     edad = Persona.edad();
     Fotocopiadora.fotocopiar(u, edad);
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
 }
 ```
-</td></tr></table>
+</td></tr>
+</table>
+
 
 ---
 
@@ -310,38 +335,40 @@ Process Persona [u:1..N-1]{
 Modifique la solución de (a) para el caso en que se deba respetar estrictamente el orden dado por el identificador del proceso (la persona X no puede usar la fotocopiadora hasta que no haya terminado de usarla la persona X-1).
 
 
-#### Fotocopiadora
+#### 
+
+<table>
+<tr><td>Fotocopiadora</td><td>Personas</td></tr>
+
+<tr><td>
 
 ```c
 Monitor Fotocopiadora{
-    cond espera;
-    int siguiente = 1;
+    cond espera[n];
+    int siguiente = 0;
 
-    Procedure fotocopiar(int u){
-        while(u != siguiente ){
-            wait(espera);
+    Procedure fotocopiar(int id){
+        if (u != siguiente ){
+            wait(espera[id]);
         }
-        siguiente++;
     }
-
-    
     Procedure terminarFotocopiar(){
+        siguiente++
         signal(espera);
     }
 }
 ```
-
-#### Personas
+</td><td>
 
 ```c
-Process Persona [u:1..N-1]{
+Process Persona [id:0..n-1]{
     Fotocopiadora.fotocopiar(u);
     //Fotocopiar
     Fotocopiadora.terminarFotocopiar();
 }
-
 ```
-
+</td></tr>
+</table>
 
 ---
 
