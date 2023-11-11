@@ -176,7 +176,71 @@ process Coordinado{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/d2c0f1b2-ed53-4006-a840-6f9832c47102)
 
+Cuando nos dicen que son tomados por cualquiera quiere decir que necesitamos un canal para ese proceso y que nos indique cual es el siguiente, y tambien tenemos un proceso coordinador cada vez que tengo que hacer algo si un canal esta vacio
 
+```c
+chan canalCliente(int,text)
+chan canalPlatosListo[C](text)
+
+process Cliente [id:0..C-1]{
+    text plato
+
+    send canalCliente(id,plato)
+    receive canalPlatoListo[id](plato)
+}
+
+chan canalVendedor(int)
+chan vendedorSiguiente[3](text)
+
+chan canalPlatosEspera(text)
+
+process Vendedor[id:0..2]{
+    int idCliente
+    text Plato
+    while (true){
+        send canalVendedor(id)
+        receive vendedorSiguiente[id](idCliente, Plato)
+
+        if (Plato == "vacio"){
+            reponerPackBebidas()
+            delayRange(60-180)
+        }
+        else{
+            send canalPlatosEspera(idCliente, Plato)
+        }
+    }
+}
+
+process Coordinador{
+    int idVendedor
+    int idCliente
+    text Plato
+    while (true){
+        receive canalVendedor(idVendedor)
+
+        if (empty(canalCliente)){
+            Plato := 'vacio'
+        }
+        else{
+            receive canalCliente(idCliente, Plato)
+        }
+        send vendedorSiguiente[idVendedor](idCliente, Plato)
+    }
+}
+
+process Cocinero(){
+    text Plato
+    int idCliente
+    while(true){
+        receive canalPlatosEspera(idCliente, Plato)
+
+        cocinarPlato(Plato)
+        send canalPlatosListo[idCliente](Plato)
+
+    }
+}
+
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/c652f033-140d-4089-b978-9dd435494cdd)
 
