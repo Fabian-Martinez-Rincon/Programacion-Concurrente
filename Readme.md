@@ -236,12 +236,68 @@ process Cocinero(){
 
         cocinarPlato(Plato)
         send canalPlatosListo[idCliente](Plato)
-
     }
 }
-
 ```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/c652f033-140d-4089-b978-9dd435494cdd)
+
+En este ejercicio ocurre algo que en los demas no, y es que no tenemos un procesos coordinador, en este caso lo que necesitamos es un semaforo para sincronizacion
+
+```c
+chan canalCliente(int)
+chan cabinaIr[N]()
+
+chan usarCabina(int)
+chan esperandoTicket[N](text)
+
+chan hayPedido()//Canal Solo para Sincronizacion
+
+process Cliente []{
+    int cabinaCorta
+    text dinero
+    text ticket
+
+    send canalCliente(id)
+    
+    //Solicitamos al empleado para una cabina
+    hayPedido()
+    receive cabinaIr[id](cabinaCorta)
+    usarCabina(cabinaCorta)
+
+    //Solicitamos al empleado para pagar
+    hayPedido()
+    send pagarEmpleado(id, dinero, cabinaCorta)
+
+    receive esperandoTicket[id](ticket)
+}
+
+process Empleado{
+    Arreglo cabinas[10] = [10,0]
+    int cabinaChica
+    int idCliente
+    text Ticket
+
+    while (true){
+        //Podemos tener dos casos de pedidos
+        receive hayPedido() 
+        // Si tengo las cabinas llenas tengo que preguntar
+        // Asi espero a que la gente termine
+        if (not empty(pagarEmpleado)) || (cabinas.todasOcupadas()){
+            receive pagarEmpleado(idCliente, dinero, cabinaChica)
+            cabinas.push(cabinaChica)//Vuelvo a agregar la cabina usada
+            Ticket = Cobrar(idCliente,dinero)
+            
+            send esperandoTicket[idCliente](Ticket)
+        }
+        else{
+            receive canalCliente(idCliente)
+            cabinaChica = cabinas.popChica()
+            send cabinaIr[idCliente](cabinaChica)
+        }            
+
+    }
+}
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/956cf904-ec12-4e4f-8051-d8efbf8fc5fe)
