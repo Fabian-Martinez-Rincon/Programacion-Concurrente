@@ -301,3 +301,56 @@ process Empleado{
 ```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/956cf904-ec12-4e4f-8051-d8efbf8fc5fe)
+
+```c
+
+send canalUsuario(text)
+
+proces Usuarios[id:0..n-1]{
+    text documento
+
+    while (true){
+        documento = generarDocumento()
+        send canalUsuario(documento)
+    }
+}
+
+chan canalDirector(text)
+
+process Director {
+    text documento
+    while (true){
+        documento = generarDocumento()
+        send canalDirector(documento)
+    }
+}
+
+
+chan canalImpresora(int)
+chan imprimir[3](text)
+
+proces Impresora[id:0..2]{
+    text documento
+    while(true){
+        send canalImpresora(id)
+        receive imprimir[id](documento)
+        imprimirDocumento(docuemtno)
+    }
+}
+
+process Coordinador(){
+    int idIpresora
+    text documento
+    while (true){
+        receive canalImpresora(idImpresora)
+
+        if (not empty(canalDirector)){
+            receive canalDirector(documento)
+        }
+        else{
+            receive canalUsuario(documento)
+        }
+        send imprimir[idImpresora](documento)
+    }
+}
+```
