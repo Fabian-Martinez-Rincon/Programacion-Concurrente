@@ -759,6 +759,44 @@ end ejercicio1
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5ff92cf2-679b-446a-af95-ddb778516e87)
 
+```c
+Procedure Ejercicio2 is
+
+Task Empledo is
+    Entry Pagar(dinero:IN text; comprobante OUT:text)
+End Empleado;
+
+Task Type Cliente;
+
+arrCliente: array [1..N] of Cliente;
+
+Task Body Cliente
+    text:comprobante
+    text:dinero
+begin
+    SELECT
+        Empleado.Pagar(dinero, comprobante)
+    OR DELAY 600
+        null
+    END SELECT
+end Cliente
+
+Task Body Empleado is
+
+Begin
+
+end Empleado;
+    text:comprobante
+    text:dinero
+begin
+    loop
+        ACCEPT Pagar(dinero: in text, comprobante out text) do
+            comprobante = realizarComprobante(dinero)
+        end Pagar;
+    end loop;
+end Ejercicio2;
+```
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/91941f1c-23f1-4cdb-a080-3f6df2169072)
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/62953c79-ea95-497c-a861-8af7a5d4bac2)
