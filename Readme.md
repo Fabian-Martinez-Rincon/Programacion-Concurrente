@@ -16,7 +16,7 @@
 - [✅ Practica 2 Semáforos](https://fabian-martinez-rincon.github.io/Programacion-Concurrente/Documentos/Practica2.html)
 - [✅ Practica 3 Monitores](https://fabian-martinez-rincon.github.io/Programacion-Concurrente/Documentos/Practica3.html)
 
-#### Practica 4 Pasaje de Mensajes Asincronico (PMA)
+### Practica 4 Pasaje de Mensajes Asincronico (PMA)
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/79d4a6a1-2da8-4575-b7b8-7372393c68e0)
 
@@ -354,3 +354,69 @@ process Coordinador(){
     }
 }
 ```
+
+### Practica 4 Pasaje de Mensajes Sincronico (PMS)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/1478c416-cec2-4a08-b9ab-704a75c33f34)
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/746301be-7c5a-427b-996e-40f71bc5c5d5)
+
+```c
+process Examinador[id:0..R-1]{
+    texto direccion
+    while (true){
+        direccion = BuscarSitioInfectado()
+        admin!etiquetaExaminador(direccion)
+    }
+}
+
+process Analizador{
+    texto direccion
+    text resultado
+    while (true){
+        Admin!etiquetaAnalizador()
+        Admin?etiquetaExaminador(direccion)
+        resultado = examinarSitio(direccion)
+    }
+}
+
+process Admin{
+    text direccion
+    Cola sitiosEspera
+    text elemento
+    do
+        Examinador[*]?etiquetaExaminador(direccion) --> sitiosEspera.push(direccion)
+        [] not empty (sitiosEspera); Analizador?etiquetaAnalizador()
+            --> 
+                elemento = pop(sitiosEspera)
+                Analizador!etiquetaExaminador(elemento)
+    od
+}
+
+```
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/75d6815d-3e46-4fc2-b416-4a4772a4fa48)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/1aa733fd-04d6-4885-ab70-6560b961bbaa)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/719e3c10-db7d-455e-904a-ddf697a76387)
+
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/90d4dc64-099e-455e-8524-fc5bdaa3aed2)
+
+### Practica 5 Ada
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/44f0327f-a48b-4845-9d57-3c6f819c2ec6)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5ff92cf2-679b-446a-af95-ddb778516e87)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/91941f1c-23f1-4cdb-a080-3f6df2169072)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/62953c79-ea95-497c-a861-8af7a5d4bac2)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/9391225b-535f-45e6-aff6-0d720be5e24e) ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/03e526a8-3124-432e-b59f-8d523ce31ae8)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/d3c6bc57-98a7-4751-b429-8064183e04e9)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/d97a2f32-6cfd-44c0-a410-ad79214d1d19)
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/678917b0-d226-4574-ad38-62a5813e00f2)
