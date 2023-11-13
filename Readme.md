@@ -759,7 +759,7 @@ end ejercicio1
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5ff92cf2-679b-446a-af95-ddb778516e87)
 
-```c
+```ada
 Procedure Ejercicio2 is
 
 Task Empledo is
@@ -799,7 +799,96 @@ end Ejercicio2;
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/91941f1c-23f1-4cdb-a080-3f6df2169072)
 
+```ada
+Procedure ejercicio3 is
+Taks Central is
+end Central;
+
+Task type Periferico;
+
+Task body Central is
+begin
+    Accept Senial1
+    loop
+        Select 
+            Accept Senial1
+        or
+            Accept Senial2
+            Timer.Empiezo
+            loop
+                Select
+                    when (Termino`count = 0) => Accept Senial2
+                or
+                    Accept Termino
+                    Breack;
+                end Select;
+            end Loop
+    end loop
+end Central
+
+Task Body Periferico1 is 
+Begin
+    loop
+        // Genera Señal
+        Select 
+            Central.Señal1;
+        Or Delay 120;
+            null;
+        End Select;
+    end loop;
+End Periferico1;
+
+
+Task Body Periferico2 is 
+Begin
+    // Genera Señal
+    loop
+        Select
+            Central.Señal2;
+            // Genera Señal
+        Else
+            delay(60)
+        End Select;
+    end loop;
+End Periferico2;
+begin
+end ejercicio3;
+```
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/62953c79-ea95-497c-a861-8af7a5d4bac2)
+
+```ada
+Procedure Ejercicio4 is
+Type Medico is
+    Entry peticionPersona()
+    Entry peticionEnfermera()
+end Medico
+
+Type Body Medico is
+Begin
+
+End Medico;
+
+Type Body Persona is
+    Contador:int;
+Begin
+    Contador:0
+    Loop
+        Select
+            Medico.peticionPersona()
+        or Delay 300
+            Contador+=1;
+            if (Contador < 3)then
+                delay(600)
+            fi
+        End Select;
+    End Loop
+End Persona
+
+begin
+    Null
+End Ejercicio4;
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/9391225b-535f-45e6-aff6-0d720be5e24e) ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/03e526a8-3124-432e-b59f-8d523ce31ae8)
 
