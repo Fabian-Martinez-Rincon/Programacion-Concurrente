@@ -534,7 +534,7 @@ process Admin{
         Alumno[*]?llegoAlumno()
     }
     for (i=0; i<N; i++){
-        Alumno[*]?llegoAlumno()
+        Alumno[*]!comenzarAlumno()
     }
 
     do Alumno[*]?examenTerminado(idAlumno, examen) --> examenesResueltos.push(idAlumno, examen)
@@ -559,6 +559,38 @@ process Profesor[id:0..p-1]{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/719e3c10-db7d-455e-904a-ddf697a76387)
 
+```c
+process Persona[id:0..p-1]{
+    text tiempoAcceso
+
+    Admin!llegoPersona(id)
+    Encargado?turnoPersona(tiempoAcceso)
+
+    UsarSimulador(tiempoAcceso)
+    Encargado!terminoPersona()
+}
+process Admin{
+    int idPersona
+    cola personasLlegada
+
+    do Persona[*]?llegoPersona(idPersona) --> personasLlegada.push(idPersona)
+    []  not empty(personasLlegada); Encargado?estoyEncargado() -->
+            idPersona = pop(personasLlegada)
+            Encargado!recibirPersona(idPersona)
+    od
+}
+process Encargado{
+    int idPersona
+    text tiempoAcceso
+    while (true) {
+        Admin!estoyEncargado()
+        Admin?recibirPersona(idPersona)
+        tiempoAcceso = calcularTiempo(idPersona)
+        Persona[idPersona]!turnoPersona(tiempoAcceso)
+        Persona[idPersona]?terminoPersona()
+    }
+}
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/90d4dc64-099e-455e-8524-fc5bdaa3aed2)
 
