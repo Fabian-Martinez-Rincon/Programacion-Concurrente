@@ -448,6 +448,115 @@ process TercerEmpleado{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/1aa733fd-04d6-4885-ab70-6560b961bbaa)
 
+#### Punto A
+
+```c
+process Alumno[id:0..n-1]{
+    text examen
+    int nota
+
+    examen = Resolver(examen)
+    Profesor!examenTerminado(examen)
+    Profesor?examenCorregido(nota)
+}
+
+process Profesor{
+    text examen
+    int nota
+
+    while (true){
+        Alumno?examenTerminado(examen)
+        nota = corregir(examen)
+        Alumno!examenCorregido(nota)
+    }
+}
+```
+
+#### Punto B
+
+```c
+process Alumno[id:0..n-1]{
+    text examen
+    int nota
+
+    examen = Resolver(examen)
+    Admin!examenTerminado(id, examen)
+    Profesor[*]?examenCorregido(nota)
+}
+
+process Admin{
+    text examen
+    int idAlumno
+    int idProfesor
+    cola examenesResueltos
+
+    do Alumno[*]?examenTerminado(idAlumno, examen) --> examenesResueltos.push(idAlumno, examen)
+    [] not empty(examenesResueltos); Profesor[*]?estoyProfe(idProfesor) -->
+        idAlumno, examen = pop(examenesResueltos)
+        Profesor[idProfesor]!(idAlumno, examen)
+    od
+}
+
+process Profesor[id:0..p-1]{
+    text examen
+    int nota
+    int idAlumno
+    while (true){
+        Admin!estoyProfe(id)
+        admin?examenTerminado(idAlumno, examen)
+        nota = corregir(examen)
+        Alumno[idAlumno]!examenCorregido(nota)
+    }
+}
+```
+
+#### Punto C
+
+```c
+process Alumno[id:0..n-1]{
+    text examen
+    int nota
+
+    Admin!llegoAlumno()
+    Admin?comenzarAlumno()
+    examen = Resolver(examen)
+    Admin!examenTerminado(id, examen)
+    Profesor[*]?examenCorregido(nota)
+}
+
+process Admin{
+    text examen
+    int idAlumno
+    int idProfesor
+    cola examenesResueltos
+
+    for (i=0; i<N; i++){
+        Alumno[*]?llegoAlumno()
+    }
+    for (i=0; i<N; i++){
+        Alumno[*]?llegoAlumno()
+    }
+
+    do Alumno[*]?examenTerminado(idAlumno, examen) --> examenesResueltos.push(idAlumno, examen)
+    [] not empty(examenesResueltos); Profesor[*]?estoyProfe(idProfesor) -->
+        idAlumno, examen = pop(examenesResueltos)
+        Profesor[idProfesor]!(idAlumno, examen)
+    od
+}
+
+process Profesor[id:0..p-1]{
+    text examen
+    int nota
+    int idAlumno
+    while (true){
+        Admin!estoyProfe(id)
+        admin?examenTerminado(idAlumno, examen)
+        nota = corregir(examen)
+        Alumno[idAlumno]!examenCorregido(nota)
+    }
+}
+```
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/719e3c10-db7d-455e-904a-ddf697a76387)
 
 
