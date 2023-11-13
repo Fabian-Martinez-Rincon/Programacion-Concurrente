@@ -396,6 +396,56 @@ process Admin{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/75d6815d-3e46-4fc2-b416-4a4772a4fa48)
 
+```c
+process PrimerEmpleado{
+    text muestra
+    while (true){
+        muestra = prepararMuestra()
+        Admin!muestrasGeneradas(muestra)
+    }
+}
+
+process Admin{
+    cola muestrasEspera
+    text muestraActual
+
+    do PrimerEmpleado?muestrasGeneradas(muestraActual) --> muestrasEspera.push(muestraActual)
+    [] not empty(muestrasEspera); SegundoEmpleado?estoySegundoEmpleado() -->
+        muestraActual = muestrasEspera.pop()
+        SegundoEmpleado!muestrasGeneradas(muestraActual) 
+    od
+}
+
+
+process SegundoEmpleado{
+    texto muestra
+    texto resultado
+    while (true){
+        Admin!estoySegundoEmpleado()
+        Admin?muestrasGeneradas(muestra)
+
+        muestra = ArmarSetAnalisis(muestra)
+
+        TercerEmpleado!muestraArmada(muestra)
+        TercerEmpleado?muestraAnalizada(resultado)
+
+        archivar(resultado)
+    }
+}
+
+process TercerEmpleado{
+    texto muestra
+    texto analizada
+    while (true){
+        SegundoEmpleado?muestraArmada(muestra)
+        analizada = analizarMuestra(muestra)
+        SegundoEmpleado!muestraAnalizada(analizada)
+    }
+}
+
+
+```
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/1aa733fd-04d6-4885-ab70-6560b961bbaa)
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/719e3c10-db7d-455e-904a-ddf697a76387)
