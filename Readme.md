@@ -594,9 +594,168 @@ process Encargado{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/90d4dc64-099e-455e-8524-fc5bdaa3aed2)
 
+```c
+process Espectador[id:0..p-1]{
+    text tiempoAcceso
+
+    Admin!llegoEspectador(id)
+    Turno?turnoEspectador(tiempoAcceso)
+
+    UsarMaquina(tiempoAcceso)
+    Turno!terminoEspectador()
+}
+process Admin{
+    int idEspectador
+    cola espectadorLlegada
+
+    do Espectador[*]?llegoEspectador(idEspectador) --> espectadorLlegada.push(idEspectador)
+    []  not empty(espectadorLlegada); Turno?estoyTurno() -->
+            idEspectador = pop(espectadorLlegada)
+            Turno!recibirPersona(idEspectador)
+    od
+}
+process Turno{
+    int idEspectador
+    text tiempoAcceso
+    while (true) {
+        Admin!estoyTurno()
+        Admin?recibirPersona(idEspectador)
+        tiempoAcceso = calcularTiempo(idEspectador)
+        Persona[idEspectador]!turnoPersona(tiempoAcceso)
+        Persona[idEspectador]?terminoPersona()
+    }
+}
+```
+
 ### Practica 5 Ada
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/44f0327f-a48b-4845-9d57-3c6f819c2ec6)
+
+#### Parte a
+
+```Ada
+Procedure ejercicio1 is
+Task Puente is
+    entry INGRESO_AUTO;
+    entry INGRESO_CAMIONETA;
+    entry INGRESO_CAMION;
+    entry SALIR_AUTO;
+    entry SALIR_CAMIONETA;
+    entry SALIR_CAMION;
+END puente;
+
+Task type vehiculo
+
+arrAuto: array (1..A) of vehiculo;
+arrCamioneta: array (1..A) of vehiculo;
+arrCamion: array (1..A) of vehiculo;
+
+Task body vehiculo  is
+begin
+    if ("Auto") then
+        Puente.INGRESO_AUTO;
+    else if ("Camioneta") then
+        Puente.INGRESO_CAMIONETA;
+    else if ("Camion") then
+        Puente.INGRESO_CAMION;
+    
+    if("Auto")then
+        Puente.SALIR_AUTO;
+    else if("Camioneta")then
+        Puente.SALIR_CAMIONETA;
+    else 
+        Puente.SALIR_CAMION;
+end vehiculo;
+
+Task Body Puente is
+    pesoActual:int = 0
+begin
+    SELECT
+        WHEN (pesoActual + 1 <= 5) => ACCEPT INGRESO_AUTO
+    OR
+        WHEN (pesoActual + 2 <= 5) => ACCEPT INGRESO_CAMIONETA
+    OR
+        WHEN (pesoActual + 3 <= 5) => ACCEPT INGRESO_CAMION
+    OR
+        ACCEPT SALIR _AUTO;
+        pesoActual -= 1;
+    OR
+        ACCEPT SALIR_CAMIONETA;
+        pesoActual -= 2;
+    OR
+        ACCEPT SALIR_CAMION;
+        pesoActual -= 3;
+    END SELECT
+end Puente;
+
+
+begin
+    null
+end ejercicio1
+```
+
+#### Parte b
+
+```Ada
+Procedure ejercicio1 is
+Task Puente is
+    entry INGRESO_AUTO;
+    entry INGRESO_CAMIONETA;
+    entry INGRESO_CAMION;
+    entry SALIR_AUTO;
+    entry SALIR_CAMIONETA;
+    entry SALIR_CAMION;
+END puente;
+
+Task type vehiculo
+
+arrAuto: array (1..A) of vehiculo;
+arrCamioneta: array (1..A) of vehiculo;
+arrCamion: array (1..A) of vehiculo;
+
+Task body vehiculo  is
+begin
+    if ("Auto") then
+        Puente.INGRESO_AUTO;
+    else if ("Camioneta") then
+        Puente.INGRESO_CAMIONETA;
+    else if ("Camion") then
+        Puente.INGRESO_CAMION;
+    
+    if("Auto")then
+        Puente.SALIR_AUTO;
+    else if("Camioneta")then
+        Puente.SALIR_CAMIONETA;
+    else 
+        Puente.SALIR_CAMION;
+end vehiculo;
+
+Task Body Puente is
+    pesoActual:int = 0
+begin
+    SELECT
+        WHEN (pesoActual + 1 <= 5) and (INGRESO_CAMION`COUNT = 0) => ACCEPT INGRESO_AUTO
+    OR
+        WHEN (pesoActual + 2 <= 5) and (INGRESO_CAMION`COUNT = 0) => ACCEPT INGRESO_CAMIONETA
+    OR
+        WHEN (pesoActual + 3 <= 5) => ACCEPT INGRESO_CAMION
+    OR
+        ACCEPT SALIR _AUTO;
+        pesoActual -= 1;
+    OR
+        ACCEPT SALIR_CAMIONETA;
+        pesoActual -= 2;
+    OR
+        ACCEPT SALIR_CAMION;
+        pesoActual -= 3;
+    END SELECT
+end Puente;
+
+
+begin
+    null
+end ejercicio1
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5ff92cf2-679b-446a-af95-ddb778516e87)
 
