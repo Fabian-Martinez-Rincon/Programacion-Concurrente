@@ -10,7 +10,7 @@
 
 ## Resumen para recuperar el primer pacial
 
-#### Resumen Semaforos
+### Resumen Semaforos
 
 - Siempre que tengamos variables compartidas usamos mutex (como la cola y contadores)
 - Si usamos las variables compartidas en un bucle, tenemos que hacer un mutex, al principio, y al final del bucle, y dentro del bucle una vez que terminamos de usar los recursos compartidos, hacemos un **V(mutex)**, hacemos lo que tenemos que hacer de forma local, y despues hacemos un **P(mutex)** al final (para esperar a que se libere antes de volver a entrar al bucle)
@@ -25,4 +25,7 @@
         }
     }
     V(mutex)
+    P(barrera)
     ```
+- Cuando tenemos dos procesos, uno que administra y otro que consume, el **V(Mutex)** final lo hace el proceso que administraba, y el **P(Mutex)** inicial lo hace el proceso que consume. **Mutex** en este caso podria ser un semafor que dica **procesoEspera[id]** si necesitamos que ese proceso espera a ser llamado. Y el **V(Mutex)** No lo haria sobre el semaforo **procesoEspera[id]** sino que necesitariamos otro semaforo para indicar que termino y avisar al coordinador como por ejemplo **V(listo)**
+- Siempre que indique algun tipo de orden de llegada, vamos a usar una cola. Cada vez que hagamos una operacion de push y pop sobre esa cola, vamos a usar Mutex
