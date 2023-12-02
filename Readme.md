@@ -8,12 +8,14 @@
 - [✅ Practica 3 Monitores](https://fabian-martinez-rincon.github.io/Programacion-Concurrente/Documentos/Practica3.html)
 - [Con esto aprobe el segundo parcial que contiene la practica 4 y 5](/Documentos/practica4-5.md)
 
-### Resumen para recuperar el primer pacial
+## Resumen para recuperar el primer pacial
+
+#### Resumen Semaforos
 
 - Siempre que tengamos variables compartidas usamos mutex (como la cola y contadores)
 - Si usamos las variables compartidas en un bucle, tenemos que hacer un mutex, al principio, y al final del bucle, y dentro del bucle una vez que terminamos de usar los recursos compartidos, hacemos un **V(mutex)**, hacemos lo que tenemos que hacer de forma local, y despues hacemos un **P(mutex)** al final (para esperar a que se libere antes de volver a entrar al bucle)
-- Cuando identificamos que se ejecuta una accion despues de que lleguen varios procesos, tenemos que usar una barrera. (En toda la barrera se usa el mutex de principio a fin nada mas)
-    Lo que esta dentro del proceso
+- Cuando identificamos que se ejecuta una accion despues de que lleguen varios procesos, tenemos que usar una barrera. (En toda la barrera se usa el mutex de principio a fin nada mas)<br>
+    **Lo que esta dentro del proceso**
     ```c
     P(mutex)
     contador = contador + 1;
