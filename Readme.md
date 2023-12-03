@@ -80,27 +80,297 @@ process Proceso[id:0..P-1]{
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/fc6f60a7-2d9b-4768-b112-da1785c3598e)
 
 ```c
-text contenedores[P]
-sem cantidad = P
+text Contenedores[N]
+sem Capacidad = N
+sem Paquetes=0
 
 
 process Preparador{
     Paquete p
+    int indicePreparador=0
+
     while (true){
+        
         Preparar(p)
 
-
+        P(Capacidad)
+        P(Mutex)
+        Contenedores[indicePreparador]=p
+        V(Mutex)
+        indicePreparador=(indicePreparador + 1) mod N
+        V(Paquetes)
     }
 }
 process Entregador{
+    Paquete p
+    int indiceEntregador=0
+
+    while (true){
+
+        P(Paquetes)
+        P(Mutex)
+        p = Contenedores[indiceEntregador]
+        V(Mutex)
+        EntregarPaquete(p)
+        indiceEntregador = (indiceEntregador + 1) mod P
+        V(Capacidad)
+    }
+}
+```
+
+B)
+En  este  caso al tener P preparadores la variable indicePreparador deja de ser local y pasa a ser compartida por los P Preparadores ya que si fuera local, varios procesos podrian estar trabajando sobre el mismo indice y no podrian trabajar por separado.
+
+IndicPreparador ahora va dentro de Mutex porque es una variable compartida ahora
+
+```c
+text Contenedores[N]
+sem Capacidad = N
+sem Paquetes=0
+int indicePreparador=0
+
+process Preparador[id:0..P-1]{
+    Paquete p
+
+    while (true){
+        
+        Preparar(p)
+
+        P(Capacidad)
+        P(Mutex)
+        Contenedores[indicePreparador]=p
+        indicePreparador=(indicePreparador + 1) mod N
+        V(Mutex)
+        V(Paquetes)
+    }
+}
+process Entregador{
+    Paquete p
+    int indiceEntregador=0
+
+    while (true){
+
+        P(Paquetes)
+        P(Mutex)
+        p = Contenedores[indiceEntregador]
+        V(Mutex)
+        EntregarPaquete(p)
+        indiceEntregador = (indiceEntregador + 1) mod P
+        V(Capacidad)
+    }
+}
+```
+
+```c
+text Contenedores[N]
+sem Capacidad = N
+sem Paquetes=0
+int indicePreparador=0
+
+process Preparador[id:0..P-1]{
+    Paquete p
+
+    while (true){
+        
+        Preparar(p)
+
+        P(Capacidad)
+        P(Mutex)
+        Contenedores[indicePreparador]=p
+        indicePreparador=(indicePreparador + 1) mod N
+        V(Mutex)
+        V(Paquetes)
+    }
+}
+
+int indiceEntregador=0
+process Entregador[id: 0..E-1]{
+    Paquete p
+
+    while (true){
+
+        P(Paquetes)
+        P(Mutex)
+        p = Contenedores[indiceEntregador]
+        indiceEntregador = (indiceEntregador + 1) mod P
+        V(Mutex)
+
+        EntregarPaquete(p)
+        V(Capacidad)
+    }
+}
+```
+
+D) Esta es basicamente los otros dos juntos
+
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/156e9ed9-4b87-4c93-82f9-311dcd3bea05)
+
+```c
+sem Impresora=1
+process Persona[id:0..N-1]{
+    text documento
+
+    P(Impresora)
+    ImprimirDocumento(documento)
+    V(Impresora)
+}
+```
+b)
+
+```c
+sem Mutex=1
+Cola c
+boolean ocupada=false
+sem EsperaPersona[N] = ([N] 0)
+
+process Persona[id:0..N-1]{
+    text documento
+    int idSiguiente
+
+    documento = generarDocumento()
+
+    P(Mutex)
+    if (not ocupada){
+        ocupada = true
+        V(Mutex)
+    }
+    else {
+        c.push(id) //No hace falta encolar el documento porque es local
+        V(Mutex)
+        P(EsperaPersona[id])
+    }
+
+    ImprimirDocumento(documento)
+
+    P(Mutex)
+    if (not empty(c)){
+        idSiguiente = c.pop()
+        V(EsperaPersona[idSiguiente])
+    }
+    else{
+        ocupada = true
+    }
+    V(Mutex)
 
 }
 ```
 
-![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/156e9ed9-4b87-4c93-82f9-311dcd3bea05)
+c)
+
+```c
+sem EsperaPersona[N] = ([N] 0)
+EsperaPersona[0] = 1
+
+
+process Persona[id:0..N-1]{
+    text documento
+
+    documento = generarDocumento()
+
+    P(EsperaPersona[id])
+    ImprimirDocumento(documento)
+    V(EsperaPersona[id++])
+
+}
+```
+
+D)
+
+```c
+sem Mutex=1
+Cola c
+sem EsperaPersona[N] = ([N] 0)
+sem Impresora = 0
+
+process Persona[id:0..N-1]{
+    text documento
+
+    documento = generarDocumento()
+
+    P(Mutex)
+    c.push(id,documento)
+    V(Mutex)
+    V(pedidosPersona)
+    P(EsperaPersona[id])
+
+    ImprimirDocumento(documento)
+
+    V(Impresora)
+}
+
+process Coordinador{
+    int idPersona;
+
+    while (true){
+        P(pedidosPersona)
+        P(Mutex)
+        idPersona = c.pop()
+        V(Mutex)
+
+        V(EsperaPersona[idPersona])
+        P(Impresora)
+    }
+}
+```
+
+E)
+
+```c
+sem Mutex=1
+Cola c
+sem EsperaPersona[N] = ([N] 0)
+
+process Persona[id:0..N-1]{
+    text documento
+
+    documento = generarDocumento()
+
+    P(Mutex)
+    c.push(id,documento)
+    V(Mutex)
+    V(pedidosPersona)
+    P(EsperaPersona[id])
+    
+    nroImpresora = impresoraAsignada[id]
+
+    usarImpresora(nroImpresora, documento)
+
+    V(Impresora[nroImpresora])
+}
+
+sem Impresora[5] = ([5] 0)
+int impresoraAsignada[N];
+sem impresorasTotales = 5
+
+process Coordinador{
+    int idPersona;
+    int nroImpresora
+
+    while (true){
+        P(pedidosPersona)
+
+        P(impresorasTotales)
+        //Busca en  los semaforos el primero con valor 0
+        nroImpresora = impresoraLibre(Impresoras)
+
+        P(Mutex)
+        idPersona = c.pop()
+        V(Mutex)
+
+        ImpresoraAsignada[idPersona] = nroImpresora
+        
+        V(EsperaPersona[idPersona])
+    }
+}
+```
+
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/9d705b69-2c45-48fc-800f-9b1db7bc30e3)
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5dd12e19-1bcb-4bd1-803d-1eca76c13cb0)
+
+```c
+
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/90f8ff11-9b18-4e22-be3c-a9eb1ab73c35)
 
