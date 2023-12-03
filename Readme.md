@@ -490,6 +490,70 @@ process Coordinador{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/57b27eb2-23be-411a-a232-b7cefec347fc)
 
+```c
+sem MutexMarcos = 1
+Cola depositoMarcos;
+sem capacidadMarcos = 30;
+sem hayMarcos = 0
+
+process Carpintero[id:0..3]{
+    Marco m
+
+    while (true){
+        hacerMarco(m)
+
+        P(capacidadMarcos)
+        P(MutexMarcos)
+        deposito.push(m)
+        V(MutexMarcos)
+        V(hayMarcos)
+    }
+}
+
+sem MutexVidrios;
+Cola depositoVidrios
+sem capacidadVidrios = 50
+sem hayVidrios = 0
+
+process Vidriero{
+    Vidrio v
+
+    while (true){
+        hacerVidrio(v)
+
+        P(capacidadVidrios)
+        P(MutexVidrios)
+        depositoVidrios.push(v)
+        V(MutexVidrios)
+        V(hayVidrios)
+    }
+}
+
+process Armador[id:0..1]{
+    Marco m
+    Vidrio v
+
+    Ventana ventana
+
+    while (true){
+        P(hayMarcos)
+        P(MutexMarcos)
+        m = depositoMarcos.pop()
+        V(MutexMarcos)
+        V(capacidadMarcos)
+
+        P(hayVidrios)
+        P(MutexVidrios)
+        v = depositoVidrios.pop()
+        V(MutexVidrios)
+        V(capacidadVidrios)
+    
+        ventana = armarVentana(m, v)
+    }
+}
+```
+
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/28d7362a-3b67-4325-99e7-791409893d32)
 
 
