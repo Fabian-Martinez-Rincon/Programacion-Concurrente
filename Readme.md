@@ -369,10 +369,124 @@ process Coordinador{
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/5dd12e19-1bcb-4bd1-803d-1eca76c13cb0)
 
 ```c
+int tareasAsignadas = 0
+sem Mutex = 1
+sem alumnosListos = 0
 
+
+process Alumno[id:0..49]{
+    text tareaAsignada
+
+    P(entrarAula)
+    tareaAsignada = Tareas[id]
+    
+    P(Mutex)
+    tareasAsignadas = tareasAsignadas + 1
+    if (tareasAsignadas = 50){
+        V(alumnosListos)
+    }
+    V(Mutex)
+    P(Barrera)
+
+    RealizarTarea(tareaAsignada)
+    tareasTerminadas = tareaAsignada
+    V(alguienTermino)
+    P(esperoPuntaje[nroGrupo])
+}
+
+sem entrarAula = 0
+sem grupos[10] = ([10] 0)
+
+process Profesor{
+    int i
+    for i in 0..49 {
+        Tareas[i] = elegir()
+    }
+    for i in 0..49 {
+        V(entrarAula)
+    }
+
+    P(alumnosListos)
+    V(Barrera)
+
+    int idAlumno
+    while (true){
+        P(alguienTermino)
+        idGrupo = quienTermino(tareasTerminadas)
+        //Que fiaca continuar pero se deberia usar una cola cuando terminen
+    }
+}
 ```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/90f8ff11-9b18-4e22-be3c-a9eb1ab73c35)
+
+```c
+int llegaron = 0
+sem TodosTerminaron = 0;
+sem llegaronTodos = 0
+int totalPiezas=0
+
+
+process Empleado[id:0..E-1]{
+    Pieza p
+
+    P(Mutex)
+    llegaron = llegaron + 1
+    if llegaron = E {
+        V(llegaronTodos)
+    }
+    V(Mutex)
+
+    P(TodosTerminaron)
+    
+    int piezasHechas = 0;
+    P(Mutex)
+    while (totalPiezas != T){
+        totalPiezas =  totalPiezas + 1
+        V(Mutex)
+
+        hacerPieza(p)
+        piezasHechas = piezasHechas + 1
+        P(Mutex)
+    }
+    V(Mutex)
+    
+    piezasProducidasEmpleado[id] = piezasHechas;
+
+    V(NoHayPiezas)
+
+    P(seEntregoPremio)
+
+    if (idMax = id){
+        TomarPremio()
+    }
+    
+}
+
+sem seEntregoPremio = 0
+
+int idMax = -1
+sem NoHayPiezas = 0
+int piezasProducidasEmpleados[E] = ([E] 0)
+
+process Coordinador{
+
+    P(llegaronTodos)
+    int i
+    for i in 1..E {
+        V(TodosTerminaron)
+    }
+
+    P(NoHayPiezas)
+
+    idMax = empleadoMaxPiezas(piezasProducidasEmpleados)
+    EntregarPremio(idMax)
+
+    for i in 1..E {
+        V(seEntregoPremio)
+    }
+}
+```
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/57b27eb2-23be-411a-a232-b7cefec347fc)
 
