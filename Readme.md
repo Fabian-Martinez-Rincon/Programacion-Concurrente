@@ -556,7 +556,144 @@ process Armador[id:0..1]{
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/28d7362a-3b67-4325-99e7-791409893d32)
 
+Este ejercicio parece facil pero tenemos que tener en cuenta que tenemos que liber que consumir los semaforos permitidos segun nuestro proceso como prioridad y no los compartidos, ya que estariamos gastando recursos al cuete
+
+```c
+sem camionesPermitidos = 7
+sem maximoTrigo = 5
+
+process CamionTrigo[id:0..T-1]{
+
+    P(maximoTrigo)
+    P(camionesPermitidos)
+    descargarCamion()
+    V(maximoTrigo)
+    V(camionesPermitidos)
+
+}
+
+sem maximoMaiz = 5
+
+process CamionMaiz[id:0..M-1]{
+    P(maximoMaiz)
+    P(camionesPermitidos)
+    descargarCamion()
+    V(maximoMaiz)
+    V(camionesPermitidos)
+}
+```
+
 
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/0618ea46-8fac-42d8-9f90-a7aeb44bd148)
 
+```c
+sem Mutex = 1
+
+process Empleado {
+    int i
+    int
+    int idPersona
+
+    for i in 1..10 {
+
+        P(llegaronCinco)
+        for j in 1..5 {
+            P(Mutex)
+            idPersona = colaPersonas.pop()
+            V(Mutex)
+            VacunarPersona(idPersona)
+        }
+        for i in 1..5 {
+            V(indicarIrse)
+        }
+    }    
+}
+
+cola colaPersonas;
+int cantLlegaron = 0
+sem llegaronCinco = 0
+sem EmpleadoLibre = 1
+
+
+process Persona[id:0..49]{
+    P(Mutex)
+    colaPersonas.push(id)
+    cantLlegaron = cantLlegaron + 1
+    V(Mutex)
+
+
+    P(EmpleadoLibre)
+    if (cantLlegaron >= 5){
+        
+        V(llegaronCinco)
+        P(indicarIrse)
+    }
+    else {
+        V(llegaronCinco)
+    }
+
+}
+
+//Me maree sigo con el siguiente
+
+tendria que ser algo asi
+
+Process Persona[id:0..P-1]{
+    P(mutex)
+        cant--; // protege esto
+        push(grupo[idGrupo],id)
+        if(cant==0){
+            idGrupo++;
+            cant= 5;
+            V(haycinco)
+        }
+    V(mutex)
+    P(vacuno[id])
+    //se va
+}
+```
+
+
 ![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/4c146bf3-1ad5-44f3-96b4-f94476491233)
+
+
+```c
+int puestosEnfermeras[3] = ([3] 0)
+sem ticket[3] = ([3] 0)
+sem Mutex = 1
+
+
+process Pasajero[id:1..149]{
+    int puestoMin
+
+    puestoMin = colaConMenosGente(puestosEnfermeras)
+
+    P(Mutex)
+    puestosEnfermeras[puestoMin].push(id)
+    V(Mutex)
+
+    V(ticket[puestoMin])
+    P(esperaPasajero[id])
+    Irse()
+}
+
+process Enfermera[id:0..2]{
+    int idPasajero
+
+
+    while (true){
+        P(ticket[id])
+
+        P(Mutex)
+        idPasajero = puestosEnfermeras[id].pop()
+        V(Mutex)
+
+        Isopar(idPasajero)
+
+        V(esperaPasajero[idPasajero])
+
+    }
+}
+```
+
+ 
