@@ -1,0 +1,64 @@
+ronda impar: procesos*rondas*n/k
+rondas*procesos*n/k-n= n*(k-1)
+4^2*2-8=16*2-8=32-8=24
+n*k-n=n*(k-1)
+Cada barra son n/k mensajes
+7,8    |    x    |    x
+5,6    |    |    |    |
+3,4    |    |    |    |
+1,2    |    x    |    x
+
+id 1 | 5,6    |    x    | 5,6 le manda 6 al de abajo id+1, recibe del id+1
+id 2 | 3,4    |    |    | 3,4 recibe 6 del de arriba, y le manda 3 al de abajo
+id 3 | 1,2    x    |    x
+
+
+
+8 | x | x | x | x
+7 | | | | | | | |
+6 | | | | | | | |
+5 | | | | | | | |
+4 | | | | | | | |
+3 | | | | | | | |
+2 | | | | | | | |
+1 | x | x | x | x
+
+k=procesos
+for k rondas
+    if (id == (ronda mod 2)) (determina paridad)
+        if (id==k) continue;
+
+        enviar mensaje al id+1
+        recibe el mensaje del id+1 (dato)
+        while (dato<last(array[id]))
+            enviar mensaje al id+1
+            recibe el mensaje del id+1 (dato)
+    else
+        if (id==1) continue;
+        recibe el mensaje del id-1 (dato)
+        enviar mensaje al id-1 first(array[id])
+        while (dato>first(array[id]))
+            recibe el mensaje del id-1 (dato)
+            enviar mensaje al id-1 first(array[id])
+    end if
+
+MISMA PARIDAD
+ENVIO RECIBO
+DISTINTA PARIDAD
+RECIBO ENVIO
+
+USA PMS
+
+k rondas, k procesos, 1 mensajes
+
+k*k=k^2 mensajes
+
+k^2-k*1 MEJOR
+
+
+
+k rondas, k procesos, n/k mensajes - k*n/k
+
+k^2 * n/k - k * n/k mensajes
+kn - n
+n(k-1) PEOR
