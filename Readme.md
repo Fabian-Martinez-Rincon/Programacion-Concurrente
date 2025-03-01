@@ -1,5 +1,9 @@
 <div align="center"> <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&duration=1200&pause=1000&color=F78E23&center=true&width=435&lines=Programación Concurrente"/></div>
 
+![b0868fa1-eab1-479d-a276-3c7f98cc555e](https://github.com/user-attachments/assets/4951e333-c414-43e5-a671-715d98d2c9ce)
+![WhatsApp Image 2025-02-12 at 21 09 03](https://github.com/user-attachments/assets/319dcbf3-ad6b-40a1-b059-02bf4fbb3608)
+
+
 <img src= 'https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height="20" width="100%">
 
 - [Explicaciones Teoricas](https://youtube.com/playlist?list=PLH8A0IjFldaGLATsgRdmPBtiNcp5KmAHo)
