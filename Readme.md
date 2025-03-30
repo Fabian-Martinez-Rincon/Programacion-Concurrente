@@ -1,9 +1,13 @@
-<div align="center"> <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&duration=1200&pause=1000&color=F78E23&center=true&width=435&lines=Programación Concurrente"/></div>
+<div align="center"> <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&duration=1200&pause=1000&color=F78E23&center=true&width=435&lines=Programación Concurrente"/>
 
 ---
 
-
 <a title="" href="https://youtu.be/WIjWz_u9zw8?si=RiKMh8NQzen1jrcD"><img src="/Documentos/image.png" width="550px"  /></a>
+
+</div>
+
+
+
 
 ---
 
