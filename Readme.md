@@ -67,7 +67,7 @@
 
 # 📌 Preguntas Practicas FIJAS
 
-<div>
+<div align="center">
 <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjZ6M3Jubm13YjRyeHpxdmN5enp5cXhmdTZiMGhhaHRwbTAwMHo3NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yYT7ytuZpJjG0/giphy.gif" width="500px">
 </div>
 
@@ -1952,7 +1952,7 @@ process user[i = 1..N] {
 
 # 📢 Miralas de Reojo
 
-<div>
+<div align="center">
 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXU3c3h4NHh2anBkb3I2NWt4dDZxN2lsNjU0YnBtNWh6Y2UyaXI5dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pb2NDIcPTwNpu/giphy.gif" width="500px">
 </div>
 
@@ -2400,7 +2400,7 @@ Resultado final: N = 2
 
 # 🚨 Rezar para que no Tomen
 
-<div>
+<div align="center">
 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExODNrODc5OWpvdTgwNzhtMDZ2b2dnNXZnMHhtZmVlOHRrbmo5ang3ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlNcdK4NM0vt4yI/giphy.gif" width="500px">
 </div>
 
