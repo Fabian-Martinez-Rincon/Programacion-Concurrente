@@ -3839,38 +3839,3 @@ Un nodo envía mensajes “probe” a sus vecinos; cuando todos responden con �
 
 **Mejor comunicación:** asincrónica, ideal en AMP por su descentralización y tolerancia a variaciones en la red.
 </details>
-
-
----
-
-# Finales
-
-
-![alt text](/images/image-26.png)
-
-
-![Z](/images/image-27.png)
-
-![alt text](image-28.png)
-
-![alt text](/images/image-29.png)
-
-![alt text](/images/image-30.png)
-
-![alt text](/images/image-31.png)
-
-![alt text](/images/image-32.png)
-
-![alt text](/images/image-33.png)
-
-![Z](/images/image-34.png)
-
-![alt text](/images/image-35.png)
-
-![alt text](/images/image-36.png)
-
-![alt text](/images/image-37.png)
-
-![alt text](/images/image-38.png)
-
-![alt text](/images/image-39.png)
